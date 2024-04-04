@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FortressSurvivor.ComponentPattern;
+using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +8,19 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor
 {
-    internal class MoveCommand : ICommand
+     class MoveCommand : ICommand
     {
+        private Player player;
+        private Vector2 velocity;
+
+        public MoveCommand(Player player, Vector2 velocity)
+        {
+            this.player = player;
+            this.velocity = velocity;
+        }
         public void Execute()
         {
-            throw new NotImplementedException();
+            player.Move(velocity);
         }
     }
 }

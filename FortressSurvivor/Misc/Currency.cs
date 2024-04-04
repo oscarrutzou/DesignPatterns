@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor
 {
-    internal class Currency
+    internal class Currency : Component
     {
+        public Currency(GameObject gameObject) : base(gameObject)
+        {
+        }
     }
 }
