@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor
 {
-    internal class ProjectilePool
+    internal class ProjectilePool : ObjectPool
     {
+        protected override void CleanUp(GameObject gameObject)
+        {
+            
+        }
+
+        protected override GameObject CreateObject()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
