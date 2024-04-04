@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor.ComponentPattern
 {
-    internal class Projectile: Component
+    internal class Projectile : Component
     {
+        public Projectile(GameObject gameObject) : base(gameObject)
+        {
+        }
     }
 }

@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
+using FortressSurvivor.ComponentPattern;
+using FortressSurvivor.CommandPattern;
 
 namespace FortressSurvivor
 {
@@ -34,6 +36,10 @@ namespace FortressSurvivor
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            GameObject playergo = new GameObject();
+            Player player = playergo.AddComponent<Player>();
+            playergo.AddComponent<SpriteRenderer>();
+            Instantiate(playergo);
 
             foreach (GameObject go in gameObjects)
             {
@@ -41,7 +47,10 @@ namespace FortressSurvivor
             }
 
             //Inputmanager
-
+            InputHandler.Instance.AddUpdateCommand(Keys.W, new MoveCommand(player, new Vector2(0, -1)));
+            InputHandler.Instance.AddUpdateCommand(Keys.S, new MoveCommand(player, new Vector2(0, 1)));
+            InputHandler.Instance.AddUpdateCommand(Keys.A, new MoveCommand(player, new Vector2(-1, 0)));
+            InputHandler.Instance.AddUpdateCommand(Keys.D, new MoveCommand(player, new Vector2(1, 0)));
             base.Initialize();
         }
 
@@ -68,7 +77,7 @@ namespace FortressSurvivor
             {
                 go.Update(gameTime);
             }
-
+            InputHandler.Instance.Execute();
 
 
             CleanUp();
