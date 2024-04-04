@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor
 {
-    public interface IObserver
+    public interface IMovementPattern
     {
-        public void Update();
+        public void Move();
+        public void OnRelease();
     }
 }

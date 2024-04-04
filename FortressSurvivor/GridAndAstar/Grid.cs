@@ -38,7 +38,7 @@ namespace FortressSurvivor
                     Point point = new Point(x, y);
                     GameObject cellGo = new GameObject();
                     cellGo.AddComponent<Cell>(this, point);
-
+                    cellGo.AddComponent<SpriteRenderer>();
                     Cells.Add(point, cellGo);
                     GameWorld.Instance.Instantiate(cellGo);
                 }

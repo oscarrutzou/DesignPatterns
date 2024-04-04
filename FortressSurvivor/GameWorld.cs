@@ -1,19 +1,27 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-using System;
-using FortressSurvivor.ComponentPattern;
-using FortressSurvivor.CommandPattern;
 
 namespace FortressSurvivor
 {
     public class GameWorld : Game, ISubject
     {
+
         private static GameWorld instance;
 
-        public static GameWorld Instance { get { return instance ??= new GameWorld(); } }
-
+        public static GameWorld Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new GameWorld();
+                }
+                return instance;
+            }
+        }
 
         private GraphicsDeviceManager _graphics;
 
@@ -26,9 +34,13 @@ namespace FortressSurvivor
 
         public static float DeltaTime { get; private set; }
         public GraphicsDeviceManager Graphics { get => _graphics; set => _graphics = value; }
-        public GameWorld()
+
+        private float timeSpawn;
+        private float timeBetweenSpawn = 1;
+        
+        private GameWorld()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -36,28 +48,38 @@ namespace FortressSurvivor
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            GameObject playergo = new GameObject();
-            Player player = playergo.AddComponent<Player>();
-            playergo.AddComponent<SpriteRenderer>();
-            Instantiate(playergo);
+
+            Director playerDirector = new Director(new PlayerBuilder());
+            GameObject playerGo = playerDirector.Contruct();
+            gameObjects.Add(playerGo);
+
+            Player player = playerGo.GetComponent<Player>() as Player;
+
+
 
             foreach (GameObject go in gameObjects)
             {
                 go.Awake();
             }
 
-            //Inputmanager
-            InputHandler.Instance.AddUpdateCommand(Keys.W, new MoveCommand(player, new Vector2(0, -1)));
-            InputHandler.Instance.AddUpdateCommand(Keys.S, new MoveCommand(player, new Vector2(0, 1)));
-            InputHandler.Instance.AddUpdateCommand(Keys.A, new MoveCommand(player, new Vector2(-1, 0)));
-            InputHandler.Instance.AddUpdateCommand(Keys.D, new MoveCommand(player, new Vector2(1, 0)));
+            //InputHandler.Instance.AddUpdateCommand(Keys.D, new MoveCommand(player, new Vector2(1, 0)));
+            //InputHandler.Instance.AddUpdateCommand(Keys.A, new MoveCommand(player, new Vector2(-1, 0)));
+            //InputHandler.Instance.AddUpdateCommand(Keys.W, new MoveCommand(player, new Vector2(0, -1)));
+            //InputHandler.Instance.AddUpdateCommand(Keys.S, new MoveCommand(player, new Vector2(0, 1)));
+
+
+            //InputHandler.Instance.AddButtonDownCommand(Keys.Left, new TeleportCommand(player, new Vector2(-1, 0)));
+            //InputHandler.Instance.AddButtonDownCommand(Keys.Right, new TeleportCommand(player, new Vector2(1, 0)));
+            //InputHandler.Instance.AddButtonDownCommand(Keys.Up, new TeleportCommand(player, new Vector2(0, -1)));
+            //InputHandler.Instance.AddButtonDownCommand(Keys.Down, new TeleportCommand(player, new Vector2(0, 1)));
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            
             foreach (GameObject go in gameObjects)
             {
                 go.Start();
@@ -70,15 +92,13 @@ namespace FortressSurvivor
                 Exit();
 
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            InputHandler.Instance.Execute();
-
             foreach (GameObject go in gameObjects)
             {
                 go.Update(gameTime);
             }
             InputHandler.Instance.Execute();
 
+            CheckCollision();
 
             CleanUp();
             base.Update(gameTime);
@@ -99,6 +119,41 @@ namespace FortressSurvivor
 
             base.Draw(gameTime);
         }
+
+        private void CheckCollision()
+        {
+            foreach (GameObject go1 in gameObjects)
+            {
+                foreach (GameObject go2 in gameObjects)
+                {
+                    if (go1 == go2) continue;
+                    //Dosent check between enemies
+                    Enemy enemy1 = go1.GetComponent<Enemy>() as Enemy;
+                    Enemy enemy2 = go2.GetComponent<Enemy>() as Enemy;
+                    if (enemy1 != null && enemy2 != null) continue; //Shouldnt make collisions between 2 enemies.
+
+                    Collider col1 = go1.GetComponent<Collider>() as Collider;
+                    Collider col2 = go2.GetComponent<Collider>() as Collider;
+
+                    //Check base collisionbox
+                    if (col1 != null && col2 != null && col1.CollisionBox.Intersects(col2.CollisionBox))
+                    {
+                        foreach (RectangleData recData1 in col1.rectanglesData.Value)
+                        {
+                            foreach (RectangleData recData2 in col2.rectanglesData.Value)
+                            {
+                                if (recData1.Rectangle.Intersects(recData2.Rectangle))
+                                {
+                                    go1.OnCollisionEnter(col2);
+                                    go2.OnCollisionEnter(col1);
+                                }
+                            }
+                        }
+                    }   
+                }
+            }
+        }
+
 
         public void Instantiate(GameObject go)
         {
@@ -127,6 +182,21 @@ namespace FortressSurvivor
             destoroyedGameObjects.Clear();
         }
 
+        //private void SpawnEnemies()
+        //{
+        //    timeSpawn -= DeltaTime;
+
+        //    if (timeSpawn <= 0)
+        //    {
+        //        timeSpawn = timeBetweenSpawn;
+
+        //        if (EnemyPool.Instance.active.Count < EnemyPool.Instance.maxAmount)
+        //        {
+        //            Instantiate(EnemyPool.Instance.GetGameObject());
+        //            Notify();
+        //        }
+        //    }
+        //}
 
         public void Attach(IObserver observer)
         {

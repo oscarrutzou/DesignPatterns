@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FortressSurvivor.Pool
+namespace FortressSurvivor
 {
     internal class ProjectilePool
     {

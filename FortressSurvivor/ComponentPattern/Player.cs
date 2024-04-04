@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor
 {
-     class Player : Component
+    public class Player : Component
     {
         private float speed;
         Animator animator;
@@ -37,7 +37,7 @@ namespace FortressSurvivor
         {
             SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
             sr.SetSprite("knight");
-            GameObject.Transform.Position = new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth / 2, GameWorld.Instance.Graphics.PreferredBackBufferHeight - sr.Sprite.Height / 3);
+            GameObject.Transform.Position = new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth / 2, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2);
         }
 
         bool canShoot = true;

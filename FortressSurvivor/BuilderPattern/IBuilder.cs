@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor
 {
-    public interface IObserver
+    public interface IBuilder
     {
-        public void Update();
+        public void BuildGameObject();
+        public GameObject GetResult();
     }
 }
