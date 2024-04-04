@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 
-namespace FortressSurvivor.Pool
+namespace FortressSurvivor
 {
     public abstract class ObjectPool
     {

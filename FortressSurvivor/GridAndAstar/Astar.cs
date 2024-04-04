@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor
 {
-    internal class Currency : Component
+    internal class Astar : Component
     {
-        public Currency(GameObject gameObject) : base(gameObject)
+        public Astar(GameObject gameObject) : base(gameObject)
         {
         }
     }

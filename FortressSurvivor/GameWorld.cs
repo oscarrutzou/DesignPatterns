@@ -11,21 +11,9 @@ namespace FortressSurvivor
 
         private static GameWorld instance;
 
-        public static GameWorld Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new GameWorld();
-                }
-                return instance;
-            }
-        }
+        public static GameWorld Instance { get { return instance ??= new GameWorld(); } }
 
-        private GraphicsDeviceManager _graphics;
 
-        private SpriteBatch _spriteBatch;
 
         private List<GameObject> newGameObjects = new List<GameObject>();
         private List<GameObject> destoroyedGameObjects = new List<GameObject>();
@@ -33,11 +21,10 @@ namespace FortressSurvivor
         private List<IObserver> observers = new List<IObserver>();
 
         public static float DeltaTime { get; private set; }
-        public GraphicsDeviceManager Graphics { get => _graphics; set => _graphics = value; }
+        public GraphicsDeviceManager Graphics { get; private set; }
+        private SpriteBatch _spriteBatch;
 
-        private float timeSpawn;
-        private float timeBetweenSpawn = 1;
-        
+
         private GameWorld()
         {
             Graphics = new GraphicsDeviceManager(this);
@@ -47,31 +34,22 @@ namespace FortressSurvivor
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+ 
             Director playerDirector = new Director(new PlayerBuilder());
             GameObject playerGo = playerDirector.Contruct();
             gameObjects.Add(playerGo);
 
             Player player = playerGo.GetComponent<Player>() as Player;
 
-
-
             foreach (GameObject go in gameObjects)
             {
                 go.Awake();
             }
 
-            //InputHandler.Instance.AddUpdateCommand(Keys.D, new MoveCommand(player, new Vector2(1, 0)));
-            //InputHandler.Instance.AddUpdateCommand(Keys.A, new MoveCommand(player, new Vector2(-1, 0)));
-            //InputHandler.Instance.AddUpdateCommand(Keys.W, new MoveCommand(player, new Vector2(0, -1)));
-            //InputHandler.Instance.AddUpdateCommand(Keys.S, new MoveCommand(player, new Vector2(0, 1)));
-
-
-            //InputHandler.Instance.AddButtonDownCommand(Keys.Left, new TeleportCommand(player, new Vector2(-1, 0)));
-            //InputHandler.Instance.AddButtonDownCommand(Keys.Right, new TeleportCommand(player, new Vector2(1, 0)));
-            //InputHandler.Instance.AddButtonDownCommand(Keys.Up, new TeleportCommand(player, new Vector2(0, -1)));
-            //InputHandler.Instance.AddButtonDownCommand(Keys.Down, new TeleportCommand(player, new Vector2(0, 1)));
+            InputHandler.Instance.AddUpdateCommand(Keys.D, new MoveCommand(player, new Vector2(1, 0)));
+            InputHandler.Instance.AddUpdateCommand(Keys.A, new MoveCommand(player, new Vector2(-1, 0)));
+            InputHandler.Instance.AddUpdateCommand(Keys.W, new MoveCommand(player, new Vector2(0, -1)));
+            InputHandler.Instance.AddUpdateCommand(Keys.S, new MoveCommand(player, new Vector2(0, 1)));
 
             base.Initialize();
         }
