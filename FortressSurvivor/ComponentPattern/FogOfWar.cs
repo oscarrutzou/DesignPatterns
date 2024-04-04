@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor.ComponentPattern
 {
-    internal class FogOfWar: Component
+    internal class FogOfWar : Component
     {
-
+        public FogOfWar(GameObject gameObject) : base(gameObject)
+        {
+        }
     }
 }
