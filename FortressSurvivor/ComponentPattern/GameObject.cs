@@ -97,11 +97,6 @@ namespace FortressSurvivor
             }
         }
 
-        private void SetLayerDepth()
-        {
-
-        }
-
         private Component AddComponentWithExistingValues(Component component)
         {
             components.Add(component);

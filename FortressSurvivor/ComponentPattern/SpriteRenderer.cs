@@ -7,12 +7,14 @@ namespace FortressSurvivor
     public enum LAYERDEPTH
     {
         Default,
-        Laser,
+        WorldBackground,
+        Enemies,
         Player,
-        Enemy,
+        WorldForeground,
+        UI,
     }
 
-    class SpriteRenderer : Component
+    internal class SpriteRenderer : Component
     {
         public SpriteRenderer(GameObject gameObject) : base(gameObject)
         {
