@@ -6,13 +6,13 @@ namespace FortressSurvivor
 {
     internal class Grid
     {
-        public Vector2 startPostion { get; private set; }
+        public Vector2 startPostion { get;  set; }
 
         private GameObject parent;
         public Dictionary<Point, GameObject> Cells { get; private set; } = new Dictionary<Point, GameObject>();
         private int width, height;
         
-        private int mapW, mapH;
+        public int mapW, mapH;
 
         private bool isCentered = true;
         private int demension => Cell.demension;
@@ -26,8 +26,12 @@ namespace FortressSurvivor
 
             if (isCentered)
             {
-                startPos = new Vector2(startPos.X - mapW * demension / 2, startPos.Y - mapH * demension / 2);
+                startPos = new Vector2(
+                    startPos.X - (width * demension * Cell.scaleSize.X / 2),
+                    startPos.Y - (height * demension * Cell.scaleSize.Y / 2)
+                );
             }
+
             this.startPostion = startPos;
             #endregion
 
@@ -38,13 +42,16 @@ namespace FortressSurvivor
                     Point point = new Point(x, y);
                     GameObject cellGo = new GameObject();
                     cellGo.AddComponent<Cell>(this, point);
-                    cellGo.AddComponent<SpriteRenderer>();
+                    cellGo.AddComponent<Collider>();
+                    SpriteRenderer sr = cellGo.AddComponent<SpriteRenderer>();
+                    sr.SetLayerDepth(LAYERDEPTH.WorldBackground);
+                    sr.SetSprite("World\\16x16White");
                     Cells.Add(point, cellGo);
                     GameWorld.Instance.Instantiate(cellGo);
                 }
             }
-
         }
+
         public GameObject GetCellGameObject(Vector2 pos)
         {
             if (pos.X < startPostion.X || pos.Y < startPostion.Y)

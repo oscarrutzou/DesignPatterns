@@ -23,7 +23,8 @@ namespace FortressSurvivor
         public static float DeltaTime { get; private set; }
         public GraphicsDeviceManager Graphics { get; private set; }
         private SpriteBatch _spriteBatch;
-
+        private Grid grid;
+        private GameObject gridGameobject;
 
         private GameWorld()
         {
@@ -37,15 +38,23 @@ namespace FortressSurvivor
  
             Director playerDirector = new Director(new PlayerBuilder());
             GameObject playerGo = playerDirector.Contruct();
-            gameObjects.Add(playerGo);
+            Instantiate(playerGo);
+
+            grid = new Grid();
+            gridGameobject = new GameObject();
+            grid.GenerateGrid(gridGameobject, new Vector2(Graphics.PreferredBackBufferWidth / 2, Graphics.PreferredBackBufferHeight / 2), 5, 5);
+            //grid.startPostion = new Vector2(Graphics.PreferredBackBufferWidth / 2, Graphics.PreferredBackBufferHeight / 2);
+            //grid.mapW = 5; grid.mapH = 5;
+
+            //GameObject cellGo = new GameObject();
+            //SpriteRenderer sr = cellGo.AddComponent<SpriteRenderer>();
+            //sr.SetSprite("World\\Tile_overlay");
+            //cellGo.AddComponent<Cell>(grid, new Point(0,0));
+            //cellGo.AddComponent<Collider>();
+            //Instantiate(cellGo);
+
 
             Player player = playerGo.GetComponent<Player>() as Player;
-
-            foreach (GameObject go in gameObjects)
-            {
-                go.Awake();
-            }
-
             InputHandler.Instance.AddUpdateCommand(Keys.D, new MoveCommand(player, new Vector2(1, 0)));
             InputHandler.Instance.AddUpdateCommand(Keys.A, new MoveCommand(player, new Vector2(-1, 0)));
             InputHandler.Instance.AddUpdateCommand(Keys.W, new MoveCommand(player, new Vector2(0, -1)));
@@ -58,10 +67,7 @@ namespace FortressSurvivor
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             
-            foreach (GameObject go in gameObjects)
-            {
-                go.Start();
-            }
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -86,7 +92,8 @@ namespace FortressSurvivor
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+            _spriteBatch.Begin(sortMode: SpriteSortMode.FrontToBack, BlendState.AlphaBlend,
+                SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
 
             foreach (GameObject go in gameObjects)
             {

@@ -16,10 +16,10 @@ namespace FortressSurvivor
             {
                 return new Rectangle
                     (
-                        (int)(GameObject.Transform.Position.X - spriteRenderer.Sprite.Width / 2),
-                        (int)(GameObject.Transform.Position.Y - spriteRenderer.Sprite.Height / 2),
-                        spriteRenderer.Sprite.Width,
-                        spriteRenderer.Sprite.Height
+                        (int)(GameObject.Transform.Position.X - (spriteRenderer.Sprite.Width * GameObject.Transform.Scale.X) / 2),
+                        (int)(GameObject.Transform.Position.Y - (spriteRenderer.Sprite.Height * GameObject.Transform.Scale.Y) / 2),
+                        spriteRenderer.Sprite.Width * (int)GameObject.Transform.Scale.X,
+                        spriteRenderer.Sprite.Height * (int)GameObject.Transform.Scale.X
                     );
             }
         }
@@ -70,14 +70,24 @@ namespace FortressSurvivor
             spriteBatch.Draw(texture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
             spriteBatch.Draw(texture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
         }
-
         private List<RectangleData> CreateRectangles()
         {
-
             texture = GameWorld.Instance.Content.Load<Texture2D>("Pixel");
-
             List<Color[]> lines = new List<Color[]>();
             List<RectangleData> pixels = new List<RectangleData>();
+
+            Vector2 cellVec = Vector2.Zero;
+            Cell cell = GameObject.GetComponent<Cell>() as Cell;
+            if (cell != null)
+            {
+                //Fix this:DDDD
+                //Set the cell to the right bottom 
+                cellVec = new Vector2(Cell.demension * GameObject.Transform.Scale.X / 2 + (Cell.demension / 2), Cell.demension * GameObject.Transform.Scale.Y / 2 + (Cell.demension / 2));
+
+                //Move one cell up and left
+                cellVec -= new Vector2(Cell.demension * GameObject.Transform.Scale.X, Cell.demension * GameObject.Transform.Scale.Y);
+            }
+
             for (int y = 0; y < spriteRenderer.Sprite.Height; y++)
             {
                 Color[] colors = new Color[spriteRenderer.Sprite.Width];
@@ -91,22 +101,17 @@ namespace FortressSurvivor
                 {
                     if (lines[y][x].A != 0)
                     {
-                        if ((x == 0)
-                            || (x == lines[y].Length)
-                            || (x > 0 && lines[y][x - 1].A == 0)
-                            || (x < lines[y].Length - 1 && lines[y][x + 1].A == 0)
-                            || (y == 0)
-                            || (y > 0 && lines[y - 1][x].A == 0)
-                            || (y < lines.Count - 1 && lines[y + 1][x].A == 0))
+                        if ((x == 0) || (x == lines[y].Length) || (x > 0 && lines[y][x - 1].A == 0) || (x < lines[y].Length - 1 && lines[y][x + 1].A == 0) || (y == 0) || (y > 0 && lines[y - 1][x].A == 0) || (y < lines.Count - 1 && lines[y + 1][x].A == 0))
                         {
-
-                            RectangleData rd = new RectangleData(x, y);
-
+                            RectangleData rd = new RectangleData(
+                                (int)((x * GameObject.Transform.Scale.X) + cellVec.X),
+                                (int)((y * GameObject.Transform.Scale.Y) + cellVec.Y));
                             pixels.Add(rd);
                         }
                     }
                 }
             }
+
             return pixels;
         }
 

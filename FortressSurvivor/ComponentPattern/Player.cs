@@ -37,6 +37,7 @@ namespace FortressSurvivor
         {
             SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
             sr.SetSprite("knight");
+            sr.SetLayerDepth(LAYERDEPTH.Player);
             GameObject.Transform.Position = new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth / 2, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2);
         }
 
