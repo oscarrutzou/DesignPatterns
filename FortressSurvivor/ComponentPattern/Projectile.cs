@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FortressSurvivor.ComponentPattern
+namespace FortressSurvivor
 {
-    internal class Projectile: Component
+    internal class Projectile : Component
     {
+        public Projectile(GameObject gameObject) : base(gameObject)
+        {
+        }
     }
 }

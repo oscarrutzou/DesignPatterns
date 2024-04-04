@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FortressSurvivor.CommandPattern
+namespace FortressSurvivor
 {
     internal class MoveCommand : ICommand
     {

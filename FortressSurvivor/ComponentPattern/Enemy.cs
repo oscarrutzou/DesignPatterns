@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FortressSurvivor.ComponentPattern
+namespace FortressSurvivor
 {
-    internal class Enemy: Component
+    internal class Enemy : Component
     {
-
+        public Enemy(GameObject gameObject) : base(gameObject)
+        {
+        }
     }
 }

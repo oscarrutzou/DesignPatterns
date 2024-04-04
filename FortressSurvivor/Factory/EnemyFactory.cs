@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FortressSurvivor.Factory
+namespace FortressSurvivor
 {
     internal class EnemyFactory: Factory
     {
