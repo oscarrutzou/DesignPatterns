@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FortressSurvivor.ComponentPattern
+namespace FortressSurvivor
 {
     internal class Currency : Component
     {

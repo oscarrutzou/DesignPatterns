@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FortressSurvivor.Pool
+namespace FortressSurvivor
 {
-    internal class ProjectilePool
+    public interface IBuilder
     {
+        public void BuildGameObject();
+        public GameObject GetResult();
     }
 }

@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor
 {
-    internal class ShootCommand : ICommand
+    internal class Astar : Component
     {
-        public void Execute()
+        public Astar(GameObject gameObject) : base(gameObject)
         {
-            throw new NotImplementedException();
         }
     }
 }

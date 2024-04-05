@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor
 {
-    internal class ShootCommand : ICommand
+    internal class ProjectilePool : ObjectPool
     {
-        public void Execute()
+        protected override void CleanUp(GameObject gameObject)
+        {
+            
+        }
+
+        protected override GameObject CreateObject()
         {
             throw new NotImplementedException();
         }

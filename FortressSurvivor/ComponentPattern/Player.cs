@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FortressSurvivor.ComponentPattern
+namespace FortressSurvivor
 {
-     class Player : Component
+    public class Player : Component
     {
         private float speed;
         Animator animator;
@@ -37,7 +37,8 @@ namespace FortressSurvivor.ComponentPattern
         {
             SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
             sr.SetSprite("knight");
-            GameObject.Transform.Position = new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth / 2, GameWorld.Instance.Graphics.PreferredBackBufferHeight - sr.Sprite.Height / 3);
+            sr.SetLayerDepth(LAYERDEPTH.Player);
+            GameObject.Transform.Position = new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth / 2, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2);
         }
 
         bool canShoot = true;
