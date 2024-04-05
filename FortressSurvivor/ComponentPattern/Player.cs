@@ -14,7 +14,9 @@ namespace FortressSurvivor
         Animator animator;
         public Player(GameObject gameObject) : base(gameObject)
         {
-            
+            int health = 100;
+            int damage = 15;
+
         }
 
         public void Move(Vector2 velocity)

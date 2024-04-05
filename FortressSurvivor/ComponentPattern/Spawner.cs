@@ -11,8 +11,10 @@ namespace FortressSurvivor
     {
         private Random rnd = new Random();
         private Vector2 potentialSpawnLocation;
-        private int waveNumber;
-        private int enemyAmount;
+        private static int waveNumber;
+        public static int defaultEnemyAmount = 15;
+        public static int enemyMultiplier = waveNumber;
+        private int totalEnemyAmount = defaultEnemyAmount * enemyMultiplier;
         public bool WaveStart = false;
         private List<Vector2> spawnLocations = new List<Vector2>();
         public Spawner(GameObject gameObject) : base(gameObject)
@@ -43,11 +45,33 @@ namespace FortressSurvivor
 
         }
 
-        public void WaveStart()
+        public void WaveStarter()
         {
-            if ()
+            if (waveNumber ==1)
             {
+                int randomNumber = rnd.Next(0, spawnLocations.Count - 1);
+                for (int i = 0; i < totalEnemyAmount; i++)
+                {
+                    // Spawn enemy on specified locations
+                }
+            }
 
+            if (waveNumber ==2)
+            {
+                int randomNumber = rnd.Next(0, spawnLocations.Count - 1);
+                for (int i = 0; i < totalEnemyAmount; i++)
+                {
+                    //
+                }
+            }
+
+            if (waveNumber == 3)
+            {
+                int randomNumber = rnd.Next(0, spawnLocations.Count - 1);
+                for (int i = 0; i < totalEnemyAmount; i++)
+                {
+
+                }
             }
         }
     }
