@@ -12,6 +12,7 @@ namespace FortressSurvivor
         Player,
         WorldForeground,
         UI,
+        Button,
     }
 
     internal class SpriteRenderer : Component

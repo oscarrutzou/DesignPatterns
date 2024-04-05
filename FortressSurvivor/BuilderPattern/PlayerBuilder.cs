@@ -23,6 +23,7 @@ namespace FortressSurvivor
             gameObject.AddComponent<Player>();
             gameObject.AddComponent<SpriteRenderer>();
             gameObject.AddComponent<Collider>();
+            gameObject.AddComponent<HealthDamage>();
             //Animator animator = gameObject.AddComponent<Animator>();
             //animator.AddAnimation(BuildAnimation("Forward", new string[] { "1fwd", "2fwd", "3fwd" }, 5));
 

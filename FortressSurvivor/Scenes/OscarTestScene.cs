@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FortressSurvivor.CommandPattern;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -34,6 +35,8 @@ namespace FortressSurvivor
             InputHandler.Instance.AddUpdateCommand(Keys.A, new MoveCommand(player, new Vector2(-1, 0)));
             InputHandler.Instance.AddUpdateCommand(Keys.W, new MoveCommand(player, new Vector2(0, -1)));
             InputHandler.Instance.AddUpdateCommand(Keys.S, new MoveCommand(player, new Vector2(0, 1)));
+            InputHandler.Instance.AddButtonDownCommand(Keys.F, new WaveCommand());
+            InputHandler.Instance.AddButtonDownCommand(Keys.K, new UpgradeCommand(player));
 
             InputHandler.Instance.AddUpdateCommand(Keys.Q, new AstarTestCommand(astar, grid));
         }

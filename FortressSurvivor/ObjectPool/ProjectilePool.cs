@@ -8,6 +8,11 @@ namespace FortressSurvivor
 {
     internal class ProjectilePool : ObjectPool
     {
+
+        private static ProjectilePool instance;
+
+        public static ProjectilePool Instance { get { return instance ??= new ProjectilePool(); } }
+        
         protected override void CleanUp(GameObject gameObject)
         {
             
@@ -15,7 +20,7 @@ namespace FortressSurvivor
 
         protected override GameObject CreateObject()
         {
-            throw new NotImplementedException();
+            return new GameObject();
         }
     }
 }
