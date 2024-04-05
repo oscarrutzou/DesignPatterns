@@ -8,9 +8,15 @@ namespace FortressSurvivor
 {
     internal class ShootCommand : ICommand
     {
+        private Player player;
+
+        public ShootCommand(Player player)
+        {
+            this.player = player;
+        }
         public void Execute()
         {
-            throw new NotImplementedException();
+            player.Shoot();
         }
     }
 }

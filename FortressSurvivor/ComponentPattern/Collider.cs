@@ -15,16 +15,6 @@ namespace FortressSurvivor
         {
             get
             {
-                if (_collider.IsEmpty) return _collider;
-                else {
-                    _collider = new Rectangle
-                    (
-                        (int)(GameObject.Transform.Position.X - (spriteRenderer.Sprite.Width * GameObject.Transform.Scale.X) / 2),
-                        (int)(GameObject.Transform.Position.Y - (spriteRenderer.Sprite.Height * GameObject.Transform.Scale.Y) / 2),
-                        spriteRenderer.Sprite.Width * (int)GameObject.Transform.Scale.X,
-                        spriteRenderer.Sprite.Height * (int)GameObject.Transform.Scale.X
-                    );
-                }
                 return _collider;
             }
         }
@@ -36,12 +26,20 @@ namespace FortressSurvivor
         }
         public override void Start()
         {
-            spriteRenderer = GameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
+            spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
+            _collider = new Rectangle
+                    (
+                        (int)(GameObject.Transform.Position.X - (spriteRenderer.Sprite.Width * GameObject.Transform.Scale.X) / 2),
+                        (int)(GameObject.Transform.Position.Y - (spriteRenderer.Sprite.Height * GameObject.Transform.Scale.Y) / 2),
+                        spriteRenderer.Sprite.Width * (int)GameObject.Transform.Scale.X,
+                        spriteRenderer.Sprite.Height * (int)GameObject.Transform.Scale.X
+                    );
             texture = GameWorld.Instance.Content.Load<Texture2D>("Pixel");
 
             rectanglesData = new Lazy<List<RectangleData>>(() => CreateRectangles());
 
             if (spriteRenderer == null) new Exception("The collision need a spriteRenderer to work");
+            var value = rectanglesData.Value;
         }
 
         public override void Update(GameTime gameTime)

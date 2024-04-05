@@ -10,6 +10,7 @@ namespace FortressSurvivor
 {
     public class Player : Component
     {
+        private Projectile projectile;
         private float speed;
         Animator animator;
         public Player(GameObject gameObject) : base(gameObject)
@@ -38,6 +39,7 @@ namespace FortressSurvivor
 
         public override void Start()
         {
+            
             SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
             sr.SetSprite("knight");
             sr.SetLayerDepth(LAYERDEPTH.Player);
@@ -52,10 +54,23 @@ namespace FortressSurvivor
             {
                 canShoot = false;
                 lastShot = 0;
-
+                GameObject arrow = ProjectileFactory.Instance.Create();
+                arrow.Transform.Position = GameObject.Transform.Position;
+                GameWorld.Instance.Instantiate(arrow);
             }
         }
         
         float lastShot = 0;
+        float shootTimer = 1;
+
+        public override void Update(GameTime gameTime)
+        {
+            lastShot = GameWorld.DeltaTime;
+
+            if (lastShot > shootTimer)
+            {
+                canShoot = true;
+            }
+        }
     }
 }

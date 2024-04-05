@@ -13,9 +13,11 @@ namespace FortressSurvivor
         WorldForeground,
         UI,
         Button,
+        Text,
+        CollisionDebug,
     }
 
-    internal class SpriteRenderer : Component
+    public class SpriteRenderer : Component
     {
         public SpriteRenderer(GameObject gameObject) : base(gameObject)
         {
@@ -30,6 +32,8 @@ namespace FortressSurvivor
 
         public override void Start()
         {
+            if (Sprite == null) return;
+
             Origin = new Vector2(Sprite.Width / 2, Sprite.Height / 2);
         }
 
@@ -41,6 +45,8 @@ namespace FortressSurvivor
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (Sprite == null) return;
+
             spriteBatch.Draw(Sprite, GameObject.Transform.Position, null, Color, GameObject.Transform.Rotation, Origin, GameObject.Transform.Scale, SpriteEffects.None, LayerDepth);
         }  
         public void SetSprite(string spriteName)

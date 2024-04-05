@@ -107,7 +107,6 @@ namespace FortressSurvivor
         {
             foreach (var component in components.Values)
             {
-                //GameObject gm = SceneData.gameObjects[0];
                 component.Draw(spriteBatch);
             }
         }
@@ -127,6 +126,18 @@ namespace FortressSurvivor
                 newComponent.SetNewGameObject(go);
             }
             return go;
+        }
+
+        public void SetLayerDepth(LAYERDEPTH layerDepth)
+        {
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.SetLayerDepth(layerDepth);
+                return;
+            }
+
+            throw new Exception($"You need to add a SpriteRenderer to set the layerdepth");
         }
 
         public void OnCollisionEnter(Collider collider)

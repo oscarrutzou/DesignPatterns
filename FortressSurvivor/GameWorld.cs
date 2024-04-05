@@ -38,6 +38,7 @@ namespace FortressSurvivor
         protected override void Initialize()
         {
 
+           
 
             ResolutionSize(1280, 720);
             //Fullscreen();
@@ -50,6 +51,7 @@ namespace FortressSurvivor
             GenerateScenes();
             currentScene = scenes[ScenesNames.OscarTestScene];
             currentScene.Initialize();
+
 
 
             base.Initialize();
