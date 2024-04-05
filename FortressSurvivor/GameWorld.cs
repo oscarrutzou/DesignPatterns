@@ -20,7 +20,7 @@ namespace FortressSurvivor
         private List<GameObject> gameObjects = new List<GameObject>();
         private List<IObserver> observers = new List<IObserver>();
 
-        public static float DeltaTime { get; private set; }
+        public float DeltaTime { get; private set; }
         public GraphicsDeviceManager Graphics { get; private set; }
         private SpriteBatch _spriteBatch;
         private Grid grid;
@@ -53,12 +53,18 @@ namespace FortressSurvivor
             //cellGo.AddComponent<Collider>();
             //Instantiate(cellGo);
 
+            GameObject currencyCounter = new GameObject();
+            currencyCounter.AddComponent<Currency>("0");
+            gameObjects.Add(currencyCounter);
+
 
             Player player = playerGo.GetComponent<Player>() as Player;
             InputHandler.Instance.AddUpdateCommand(Keys.D, new MoveCommand(player, new Vector2(1, 0)));
             InputHandler.Instance.AddUpdateCommand(Keys.A, new MoveCommand(player, new Vector2(-1, 0)));
             InputHandler.Instance.AddUpdateCommand(Keys.W, new MoveCommand(player, new Vector2(0, -1)));
             InputHandler.Instance.AddUpdateCommand(Keys.S, new MoveCommand(player, new Vector2(0, 1)));
+
+            InputHandler.Instance.AddButtonDownCommand(Keys.Space, new ShootCommand(player));
 
             base.Initialize();
         }

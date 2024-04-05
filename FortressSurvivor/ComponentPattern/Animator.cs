@@ -27,7 +27,7 @@ namespace FortressSurvivor
         {
             if (currentAnimation == null) return;
 
-            timeElapsed += GameWorld.DeltaTime;
+            timeElapsed += GameWorld.Instance.DeltaTime;
             CurrentIndex = (int)(timeElapsed * currentAnimation.FPS);
 
             if (CurrentIndex > currentAnimation.Sprites.Length - 1)
