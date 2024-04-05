@@ -26,10 +26,14 @@ namespace FortressSurvivor
 
         public static float DeltaTime { get; private set; }
         public GraphicsDeviceManager Graphics { get => _graphics; set => _graphics = value; }
-        public GameWorld()
+        public GameWorld() 
         {
+            
             _graphics = new GraphicsDeviceManager(this);
+            
             Content.RootDirectory = "Content";
+
+            
             IsMouseVisible = true;
         }
 

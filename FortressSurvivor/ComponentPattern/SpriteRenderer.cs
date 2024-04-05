@@ -42,6 +42,8 @@ namespace FortressSurvivor
         }  
         public void SetSprite(string spriteName)
         {
+            
+
             Sprite = GameWorld.Instance.Content.Load<Texture2D>(spriteName);
         }
 
