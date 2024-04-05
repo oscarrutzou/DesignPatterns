@@ -10,17 +10,22 @@ namespace FortressSurvivor
         private SpriteRenderer spriteRenderer;
         private Texture2D texture;
 
+        private Rectangle _collider;
         public Rectangle CollisionBox
         {
             get
             {
-                return new Rectangle
+                if (_collider.IsEmpty) return _collider;
+                else {
+                    _collider = new Rectangle
                     (
                         (int)(GameObject.Transform.Position.X - (spriteRenderer.Sprite.Width * GameObject.Transform.Scale.X) / 2),
                         (int)(GameObject.Transform.Position.Y - (spriteRenderer.Sprite.Height * GameObject.Transform.Scale.Y) / 2),
                         spriteRenderer.Sprite.Width * (int)GameObject.Transform.Scale.X,
                         spriteRenderer.Sprite.Height * (int)GameObject.Transform.Scale.X
                     );
+                }
+                return _collider;
             }
         }
 

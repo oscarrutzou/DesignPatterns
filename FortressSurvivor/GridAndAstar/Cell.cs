@@ -2,10 +2,11 @@
 
 namespace FortressSurvivor
 {
-    internal class Cell : Component
+    public class Cell : Component
     {
         public static int demension = 16;
         public static Vector2 scaleSize = new Vector2(4, 4);
+        public bool isValid = true;
 
         public int cost = 1;
         public int G;
@@ -14,7 +15,10 @@ namespace FortressSurvivor
 
         public Point gridPosition;
 
-        public Cell Parent { get; set; }
+        /// <summary>
+        /// Parent is for the Astar, not the GameObject that is attached as "GameObject".
+        /// </summary>
+        public GameObject Parent { get; set; }
 
 
         public Cell(GameObject gameObject, Grid grid, Point point) : base(gameObject)

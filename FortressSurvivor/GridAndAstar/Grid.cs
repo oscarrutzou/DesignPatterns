@@ -4,23 +4,27 @@ using Microsoft.Xna.Framework;
 
 namespace FortressSurvivor
 {
-    internal class Grid
+    public class Grid : Component
     {
         public Vector2 startPostion { get;  set; }
 
-        private GameObject parent;
         public Dictionary<Point, GameObject> Cells { get; private set; } = new Dictionary<Point, GameObject>();
         private int width, height;
         
         public int mapW, mapH;
 
         private bool isCentered = true;
-        private int demension => Cell.demension;
 
-        public void GenerateGrid(GameObject parent, Vector2 startPos, int width, int height)
+        private int demension => Cell.demension;
+        public Grid(GameObject gameObject) : base(gameObject)
+        {
+
+        }
+
+
+        public void GenerateGrid(Vector2 startPos, int width, int height)
         {
             #region Set Params
-            this.parent = parent;
             this.width = width;
             this.height = height;
 
@@ -59,8 +63,8 @@ namespace FortressSurvivor
                 return null; // Position is negative, otherwise it will make a invisable tile in the debug, since it cast to int, then it gets rounded to 0 and results in row and column
             }
 
-            int gridX = (int)((pos.X - startPostion.X) / Cell.demension);
-            int gridY = (int)((pos.Y - startPostion.Y) / Cell.demension);
+            int gridX = (int)((pos.X - startPostion.X) / (Cell.demension * Cell.scaleSize.X));
+            int gridY = (int)((pos.Y - startPostion.Y) / (Cell.demension * Cell.scaleSize.Y));
 
             if (0 <= gridX && gridX < width && 0 <= gridY && gridY < height)
             {
@@ -73,5 +77,6 @@ namespace FortressSurvivor
         public Vector2 PosFromGridPos(Point point) => Cells[point].Transform.Position;
 
         public GameObject GetCellGameObjectFromPoint(Point point) => GetCellGameObject(PosFromGridPos(point));
+        public Cell GetCellFromPoint(Point point) => GetCellGameObjectFromPoint(point).GetComponent<Cell>();
     }
 }

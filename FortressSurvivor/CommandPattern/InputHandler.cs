@@ -1,14 +1,17 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
 namespace FortressSurvivor
 {
-    class InputHandler
+    public class InputHandler
     {
         private static InputHandler instance;
         public static InputHandler Instance { get { return instance ??= instance = new InputHandler(); } }
 
-        private InputHandler() { }
+        private InputHandler() {
+            AddUpdateCommand(Keys.Escape, new QuitCommand());
+        }
         private Dictionary<Keys, ICommand> keybindsUpdate = new Dictionary<Keys, ICommand>();
         private Dictionary<Keys, ICommand> keybindsButtonDown = new Dictionary<Keys, ICommand>();
 
@@ -21,6 +24,7 @@ namespace FortressSurvivor
         {
             keybindsButtonDown.Add(inputKey, command);
         }
+
         private KeyboardState previousKeyState;
         public void Execute()
         {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace FortressSurvivor
 {
@@ -36,6 +37,26 @@ namespace FortressSurvivor
                 CurrentIndex = 0;
             }
             spriteRenderer.Sprite = currentAnimation.Sprites[CurrentIndex];
+        }
+
+        /// <summary>
+        /// Use the normal GlobalAnimation and GlobalTextures from other projects next time. 
+        /// Ineffecient to make a new Animation each time
+        /// </summary>
+        /// <param name="animName"></param>
+        /// <param name="spritesNames"></param>
+        /// <param name="fps"></param>
+        /// <returns></returns>
+        private Animation BuildAnimation(string animName, string[] spritesNames, float fps)
+        {
+            Texture2D[] sprites = new Texture2D[spritesNames.Length];
+
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                sprites[i] = GameWorld.Instance.Content.Load<Texture2D>(spritesNames[i]);
+            }
+
+            return new Animation(animName, sprites, fps);
         }
 
         public void AddAnimation(Animation animation)

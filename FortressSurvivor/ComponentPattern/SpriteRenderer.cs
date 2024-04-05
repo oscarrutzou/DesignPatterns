@@ -21,6 +21,7 @@ namespace FortressSurvivor
         }
 
         public Texture2D Sprite { get; set; }
+        public Color Color { get; set; } = Color.White;
 
         public Vector2 Origin { get; set; }
         private float LayerDepth;
@@ -31,7 +32,6 @@ namespace FortressSurvivor
             Origin = new Vector2(Sprite.Width / 2, Sprite.Height / 2);
         }
 
-      
         public void SetLayerDepth(LAYERDEPTH layerName)
         {
             LayerName = layerName;
@@ -40,14 +40,11 @@ namespace FortressSurvivor
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Sprite, GameObject.Transform.Position, null, Color.White, GameObject.Transform.Rotation, Origin, GameObject.Transform.Scale, SpriteEffects.None, LayerDepth);
+            spriteBatch.Draw(Sprite, GameObject.Transform.Position, null, Color, GameObject.Transform.Rotation, Origin, GameObject.Transform.Scale, SpriteEffects.None, LayerDepth);
         }  
         public void SetSprite(string spriteName)
         {
-            
-
             Sprite = GameWorld.Instance.Content.Load<Texture2D>(spriteName);
-
         }
 
     }

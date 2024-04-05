@@ -6,37 +6,44 @@ using System.Linq;
 
 namespace FortressSurvivor
 {
+
+    // Make another one, where it just adds the gameobject to a Dictionary when a new type is created?
+    // That is not one of the normal types like, animation, collision, spriterenderer and so on.
+    public enum GameObjectTypes
+    {
+        Cell,
+        Player,
+        Enemy,
+        Gui,
+        Default, //Not set
+    }
+
     public class GameObject
     {
-        public List<Component> components { get; private set; } = new List<Component>();
-
+        private Dictionary<Type, Component> components = new Dictionary<Type, Component>();
         public Transform Transform { get; private set; } = new Transform();
 
-        public string Tag { get; set; }
+        public GameObjectTypes Type { get; set; } = GameObjectTypes.Default;
 
 
         public T AddComponent<T>() where T : Component
         {
             Type componentType = typeof(T);
-            // Get All constructors
-            var constructors = componentType.GetConstructors();
-            // Find COnstructor with exacly 1 param that is a GameObject
-            var constructor = constructors.FirstOrDefault(c =>
+            var constructor = componentType.GetConstructors().FirstOrDefault(c =>
             {
                 var parameters = c.GetParameters();
                 return parameters.Length == 1 && parameters[0].ParameterType == typeof(GameObject);
             });
+
             if (constructor != null)
             {
-                //Create instance of component using the Activator Class with This GameObject as A parameter.
                 T component = (T)Activator.CreateInstance(componentType, this);
-                components.Add(component);
+                components[componentType] = component;
                 return component;
             }
             else
             {
-                //Error handling...
-                throw new InvalidOperationException($"Klassen {componentType.Name} skal have en konstruktør med ét parameter af typen GameObject.");
+                throw new InvalidOperationException($"The class {componentType.Name} must have a constructor with one parameter of type GameObject.");
             }
         }
 
@@ -45,84 +52,90 @@ namespace FortressSurvivor
             Type componentType = typeof(T);
             try
             {
-                //Finds the contructer with the correct params
-                object[] allParams = new object[1 + additionalParams.Length]; //Sætter alle params in i et array
+                //Finds the constructor with the correct params
+                object[] allParams = new object[1 + additionalParams.Length]; //Sets all params in an array
                 allParams[0] = this;
                 Array.Copy(additionalParams, 0, allParams, 1, additionalParams.Length);
 
                 T component = (T)Activator.CreateInstance(componentType, allParams);
-                components.Add(component);
+                components[componentType] = component;
                 return component;
             }
             catch (Exception)
             {
-                throw new Exception($"Klassen {componentType.Name} har ikke en contructer som passer med de leverede parameter.");
+                throw new Exception($"The class {componentType.Name} does not have a constructor that matches the provided parameters.");
             }
         }
 
-        public Component GetComponent<T>() where T : Component
+
+        public T GetComponent<T>() where T : Component
         {
-            return components.Find(x => x.GetType() == typeof(T));
+            Type componentType = typeof(T);
+            if (components.TryGetValue(componentType, out Component component))
+            {
+                return (T)component;
+            }
+
+            return null;
         }
 
         public void Awake()
         {
-            for (int i = 0; i < components.Count; i++)
+            foreach (var component in components.Values)
             {
-                components[i].Awake();
+                component.Awake();
             }
         }
 
         public void Start()
         {
-            for (int i = 0; i < components.Count; i++)
+            foreach (var component in components.Values)
             {
-                components[i].Start();
+                component.Start();
             }
         }
 
         public void Update(GameTime gameTime)
         {
-            for (int i = 0; i < components.Count; i++)
+            foreach (var component in components.Values)
             {
-                components[i].Update(gameTime);
+                component.Update(gameTime);
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            for (int i = 0; i < components.Count; i++)
+            foreach (var component in components.Values)
             {
-                components[i].Draw(spriteBatch);
+                //GameObject gm = SceneData.gameObjects[0];
+                component.Draw(spriteBatch);
             }
         }
 
         private Component AddComponentWithExistingValues(Component component)
         {
-            components.Add(component);
+            components[component.GetType()] = component;
             return component;
         }
 
         public object Clone()
         {
             GameObject go = new GameObject();
-
-            foreach (Component component in components)
+            foreach (Component component in components.Values)
             {
                 Component newComponent = go.AddComponentWithExistingValues(component.Clone() as Component);
                 newComponent.SetNewGameObject(go);
             }
-
             return go;
         }
 
         public void OnCollisionEnter(Collider collider)
         {
-            for (int i = 0; i < components.Count; i++)
+            foreach (var component in components.Values)
             {
-                components[i].OnCollisionEnter(collider);
+                component.OnCollisionEnter(collider);
             }
         }
-
     }
+
 }

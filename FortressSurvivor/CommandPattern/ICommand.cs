@@ -1,7 +1,7 @@
 ﻿
 namespace FortressSurvivor
 {
-    interface ICommand
+    public interface ICommand
     {
         void Execute();
     }

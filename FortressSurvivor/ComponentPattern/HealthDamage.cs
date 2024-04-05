@@ -8,6 +8,7 @@ namespace FortressSurvivor
 {
     internal class HealthDamage : Component
     {
+
         public HealthDamage(GameObject gameObject) : base(gameObject)
         {
         }

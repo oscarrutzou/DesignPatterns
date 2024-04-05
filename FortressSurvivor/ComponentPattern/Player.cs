@@ -23,14 +23,15 @@ namespace FortressSurvivor
             {
                 velocity.Normalize();
             }
-
+            //Check for the grid if its inside the castle cells
             velocity *= speed;
             GameObject.Transform.Translate(velocity * GameWorld.DeltaTime);
+            GameWorld.Instance.worldCam.Move(velocity * GameWorld.DeltaTime);
         }
 
         public override void Awake()
         {
-            speed = 100;
+            speed = 200;
         }
 
         public override void Start()
@@ -38,7 +39,6 @@ namespace FortressSurvivor
             SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
             sr.SetSprite("knight");
             sr.SetLayerDepth(LAYERDEPTH.Player);
-            GameObject.Transform.Position = new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth / 2, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2);
         }
 
         bool canShoot = true;
