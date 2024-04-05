@@ -25,6 +25,8 @@ namespace FortressSurvivor
         private SpriteBatch _spriteBatch;
         private Grid grid;
         private GameObject gridGameobject;
+        private Texture2D _buttontexture;
+        private Button _button;
 
         private GameWorld()
         {
@@ -66,6 +68,7 @@ namespace FortressSurvivor
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            
             
 
         }
