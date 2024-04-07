@@ -29,6 +29,9 @@ namespace FortressSurvivor
         private Texture2D _buttontexture;
         private Button _button;
 
+        private float timeSpawn;
+        private float timeBetweenSpawn;
+
         private GameWorld()
         {
             Graphics = new GraphicsDeviceManager(this);
@@ -173,21 +176,21 @@ namespace FortressSurvivor
             destoroyedGameObjects.Clear();
         }
 
-        //private void SpawnEnemies()
-        //{
-        //    timeSpawn -= DeltaTime;
+        private void SpawnEnemies()
+        {
+            timeSpawn -= DeltaTime;
 
-        //    if (timeSpawn <= 0)
-        //    {
-        //        timeSpawn = timeBetweenSpawn;
+            if (timeSpawn <= 0)
+            {
+                timeSpawn = timeBetweenSpawn;
 
-        //        if (EnemyPool.Instance.active.Count < EnemyPool.Instance.maxAmount)
-        //        {
-        //            Instantiate(EnemyPool.Instance.GetGameObject());
-        //            Notify();
-        //        }
-        //    }
-        //}
+                if (EnemyPool.Instance.active.Count < EnemyPool.Instance.maxAmount)
+                {
+                    Instantiate(EnemyPool.Instance.GetObject());
+                    Notify();
+                }
+            }
+        }
 
         public void Attach(IObserver observer)
         {
