@@ -38,6 +38,7 @@ namespace FortressSurvivor
 
             this.startPostion = startPos;
             #endregion
+            int amount = 0;
 
             for (int y = 0; y < height; y++)
             {
@@ -50,8 +51,12 @@ namespace FortressSurvivor
                     SpriteRenderer sr = cellGo.AddComponent<SpriteRenderer>();
                     sr.SetLayerDepth(LAYERDEPTH.WorldBackground);
                     sr.SetSprite("World\\16x16White");
+
+                    if (amount % 3 == 0 || x % 2 == 0) sr.Color = new Color(150, 150, 150);
+
                     Cells.Add(point, cellGo);
                     GameWorld.Instance.Instantiate(cellGo);
+                    amount++;
                 }
             }
         }
