@@ -10,7 +10,7 @@ namespace FortressSurvivor
 {
     public abstract class ObjectPool
     {
-        protected List<GameObject> active = new List<GameObject>();
+        public List<GameObject> active = new List<GameObject>();
 
         protected Stack<GameObject> inactive = new Stack<GameObject>();
 

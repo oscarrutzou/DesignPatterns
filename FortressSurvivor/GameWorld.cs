@@ -27,6 +27,9 @@ namespace FortressSurvivor
 
 
 
+        private float timeSpawn;
+        private float timeBetweenSpawn;
+
         private GameWorld()
         {
             gfxManager = new GraphicsDeviceManager(this);
