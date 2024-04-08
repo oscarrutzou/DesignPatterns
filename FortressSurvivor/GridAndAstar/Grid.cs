@@ -46,7 +46,7 @@ namespace FortressSurvivor
                     Point point = new Point(x, y);
                     GameObject cellGo = new GameObject();
                     cellGo.AddComponent<Cell>(this, point);
-                    cellGo.AddComponent<Collider>();
+                    //cellGo.AddComponent<Collider>();
                     SpriteRenderer sr = cellGo.AddComponent<SpriteRenderer>();
                     sr.SetLayerDepth(LAYERDEPTH.WorldBackground);
                     sr.SetSprite("World\\16x16White");

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace FortressSurvivor
 {
@@ -10,11 +11,11 @@ namespace FortressSurvivor
         private Matrix transformMatrix;    // A transformation matrix used for rendering.
         public bool moveable;
 
-        public Camera(Vector2 origin, bool moveable)
+        public Camera(bool moveable)
         {
             position = Vector2.Zero;   // Initialize the camera's position at the origin.
             zoom = 1.0f;               // Initialize the camera's zoom level to 1.0
-            this.origin = origin;
+            origin = new Vector2(GameWorld.Instance.gfxManager.PreferredBackBufferWidth / 2, GameWorld.Instance.gfxManager.PreferredBackBufferHeight / 2);
             this.moveable = moveable;
         }
 
@@ -26,37 +27,48 @@ namespace FortressSurvivor
 
         public Vector2 TopLeft
         {
-            get { return position; }
+            get { return position - new Vector2(GameWorld.Instance.gfxManager.PreferredBackBufferWidth / 2, GameWorld.Instance.gfxManager.PreferredBackBufferHeight / 2); }
         }
         public Vector2 TopCenter
         {
-            get { return position + new Vector2(GameWorld.Instance.gfxManager.PreferredBackBufferWidth / 2, 0); }
+            get { return position - new Vector2(0, GameWorld.Instance.gfxManager.PreferredBackBufferHeight / 2); }
         }
 
         public Vector2 TopRight
         {
-            get { return position + new Vector2(GameWorld.Instance.gfxManager.PreferredBackBufferWidth, 0); }
+            get { return position + new Vector2(GameWorld.Instance.gfxManager.PreferredBackBufferWidth / 2, -GameWorld.Instance.gfxManager.PreferredBackBufferHeight / 2); }
+        }
+
+        public Vector2 LeftCenter
+        {
+            get { return position - new Vector2(GameWorld.Instance.gfxManager.PreferredBackBufferWidth / 2, 0); }
         }
 
         public Vector2 Center
         {
-            get { return position + new Vector2(GameWorld.Instance.gfxManager.PreferredBackBufferWidth / 2, GameWorld.Instance.gfxManager.PreferredBackBufferHeight / 2); }
+            get { return position; }
+        }
+
+        public Vector2 RightCenter
+        {
+            get { return position + new Vector2(GameWorld.Instance.gfxManager.PreferredBackBufferWidth / 2, 0); }
         }
 
         public Vector2 BottomLeft
         {
-            get { return position + new Vector2(0, GameWorld.Instance.gfxManager.PreferredBackBufferHeight); }
+            get { return position + new Vector2(-GameWorld.Instance.gfxManager.PreferredBackBufferWidth / 2, GameWorld.Instance.gfxManager.PreferredBackBufferHeight / 2); }
         }
 
         public Vector2 BottomCenter
         {
-            get { return position + new Vector2(GameWorld.Instance.gfxManager.PreferredBackBufferWidth / 2, GameWorld.Instance.gfxManager.PreferredBackBufferHeight); }
+            get { return position + new Vector2(0, GameWorld.Instance.gfxManager.PreferredBackBufferHeight / 2); }
         }
 
         public Vector2 BottomRight
         {
-            get { return position + new Vector2(GameWorld.Instance.gfxManager.PreferredBackBufferWidth, GameWorld.Instance.gfxManager.PreferredBackBufferHeight); }
+            get { return position + new Vector2(GameWorld.Instance.gfxManager.PreferredBackBufferWidth / 2, GameWorld.Instance.gfxManager.PreferredBackBufferHeight / 2); }
         }
+
 
 
         public Matrix GetMatrix()

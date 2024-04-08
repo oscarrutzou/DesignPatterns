@@ -42,8 +42,8 @@ namespace FortressSurvivor
 
             ResolutionSize(1280, 720);
             //Fullscreen();
-            worldCam = new Camera(new Vector2(gfxManager.PreferredBackBufferWidth / 2, gfxManager.PreferredBackBufferHeight / 2), true);
-            uiCam = new Camera(Vector2.Zero, false);
+            worldCam = new Camera(true);
+            uiCam = new Camera(false);
 
             //GlobalTextures.LoadContent();
             //GlobalAnimations.LoadContent();
@@ -66,7 +66,7 @@ namespace FortressSurvivor
         {
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            InputHandler.Instance.Execute();
+            InputHandler.Instance.Update();
             currentScene.Update(gameTime);
             base.Update(gameTime);
         }

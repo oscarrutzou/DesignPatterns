@@ -15,9 +15,6 @@ namespace FortressSurvivor
         Animator animator;
         public Player(GameObject gameObject) : base(gameObject)
         {
-            int health = 100;
-            int damage = 15;
-
         }
 
         public void Move(Vector2 velocity)
@@ -65,7 +62,7 @@ namespace FortressSurvivor
 
         public override void Update(GameTime gameTime)
         {
-            lastShot = GameWorld.DeltaTime;
+            lastShot += GameWorld.DeltaTime;
 
             if (lastShot > shootTimer)
             {

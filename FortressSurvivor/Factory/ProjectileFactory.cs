@@ -10,17 +10,7 @@ namespace FortressSurvivor
     {
         private static ProjectileFactory instance;
 
-        public static ProjectileFactory Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ProjectileFactory();
-                }
-                return instance;
-            }
-        }
+        public static ProjectileFactory Instance { get { return instance ??= new ProjectileFactory(); } }
         
        
         
@@ -29,7 +19,9 @@ namespace FortressSurvivor
             GameObject arrow = new GameObject();
             SpriteRenderer sr = arrow.AddComponent<SpriteRenderer>();
             sr.SetSprite("arrow1");
+            sr.SetLayerDepth(LAYERDEPTH.Player);
             arrow.AddComponent<Collider>();
+            arrow.AddComponent<Projectile>();
             GameWorld.Instance.Instantiate(arrow);
             return arrow;
         }
