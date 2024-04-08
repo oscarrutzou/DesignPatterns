@@ -14,8 +14,6 @@ namespace FortressSurvivor
             {
                 Position += translation;
             }
-
-
         }
     }
 }

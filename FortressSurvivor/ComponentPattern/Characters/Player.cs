@@ -10,19 +10,16 @@ namespace FortressSurvivor
 {
     public class Player : Component
     {
-        private Projectile projectile;
         private float speed;
         Animator animator;
-        private GameObject fogOfWar;
-        private SpriteRenderer fogOfWarSr;
+        private GameObject fogOfWarGo;
         public Player(GameObject gameObject) : base(gameObject)
         {
         }
 
         public Player(GameObject gameObject, GameObject followObject) : base(gameObject)
         {
-            fogOfWar = followObject;
-            fogOfWarSr = fogOfWar.GetComponent<SpriteRenderer>();
+            fogOfWarGo = followObject;
         }
 
         public void Move(Vector2 velocity)
@@ -35,9 +32,6 @@ namespace FortressSurvivor
             velocity *= speed;
             GameObject.Transform.Translate(velocity * GameWorld.DeltaTime);
             GameWorld.Instance.worldCam.Move(velocity * GameWorld.DeltaTime);
-
-         
-
         }
 
         public override void Awake()
@@ -47,7 +41,6 @@ namespace FortressSurvivor
 
         public override void Start()
         {
-            
             SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>();
             sr.SetSprite("knight");
             sr.SetLayerDepth(LAYERDEPTH.Player);
@@ -69,12 +62,11 @@ namespace FortressSurvivor
         }
         
         float lastShot = 0;
-        float shootTimer = 1;
+        readonly float shootTimer = 1;
 
         public override void Update(GameTime gameTime)
         {
-            fogOfWar.Transform.Position = GameObject.Transform.Position + new Vector2(-fogOfWarSr.Sprite.Width / 2, -fogOfWarSr.Sprite.Height / 2);
-
+            fogOfWarGo.Transform.Position = GameObject.Transform.Position;
 
             lastShot += GameWorld.DeltaTime;
 

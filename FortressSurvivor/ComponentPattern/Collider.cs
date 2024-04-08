@@ -9,17 +9,24 @@ namespace FortressSurvivor
     {
         private SpriteRenderer spriteRenderer;
         private Texture2D texture;
+        private int collisionWidth, collisionHeight; //If not set, use the sprite width and height
+        private Vector2 offset;
 
         public Rectangle CollisionBox
         {
             get
             {
+                int width, height;
+
+                width = collisionWidth > 0 ? collisionWidth : spriteRenderer.Sprite.Width; 
+                height = collisionHeight > 0 ? collisionHeight : spriteRenderer.Sprite.Height;
+
                 return new Rectangle
                     (
-                        (int)(GameObject.Transform.Position.X - (spriteRenderer.Sprite.Width * GameObject.Transform.Scale.X) / 2),
-                        (int)(GameObject.Transform.Position.Y - (spriteRenderer.Sprite.Height * GameObject.Transform.Scale.Y) / 2),
-                        spriteRenderer.Sprite.Width * (int)GameObject.Transform.Scale.X,
-                        spriteRenderer.Sprite.Height * (int)GameObject.Transform.Scale.X
+                        (int)(GameObject.Transform.Position.X - (width * GameObject.Transform.Scale.X) / 2),
+                        (int)(GameObject.Transform.Position.Y - (height * GameObject.Transform.Scale.Y) / 2),
+                        width * (int)GameObject.Transform.Scale.X,
+                        height * (int)GameObject.Transform.Scale.X
                     );
             }
         }
@@ -47,27 +54,38 @@ namespace FortressSurvivor
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            DrawRectangle(CollisionBox, spriteBatch);
+            DrawRectangle(CollisionBox, spriteBatch, offset);
 
             if (rectanglesData.IsValueCreated)
             {
                 foreach (RectangleData rectangleData in rectanglesData.Value)
                 {
-                    DrawRectangle(rectangleData.Rectangle, spriteBatch);
+                    DrawRectangle(rectangleData.Rectangle, spriteBatch, Vector2.Zero);
                 }
             }
         }
 
-
-        private void DrawRectangle(Rectangle collisionBox, SpriteBatch spriteBatch)
+        public void SetCollisionBox(int width, int height)
         {
-            // Still missing if the spriterenderer isnt IsCentered. 
-            // Fix by make a Vector2 that uses the point * (scale + origin)
-            // Same fix in the pixelperfect
-            Rectangle topLine = new Rectangle(collisionBox.X, collisionBox.Y, collisionBox.Width, 1);
-            Rectangle bottomLine = new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 1);
-            Rectangle rightLine = new Rectangle(collisionBox.X + collisionBox.Width, collisionBox.Y, 1, collisionBox.Height);
-            Rectangle leftLine = new Rectangle(collisionBox.X, collisionBox.Y, 1, collisionBox.Height);
+            collisionHeight = width;
+            collisionHeight = height;
+        }
+
+        public void SetCollisionBox(int width, int height, Vector2 offset)
+        {
+            collisionHeight = width;
+            collisionHeight = height;
+            this.offset = offset;
+        }
+
+        private void DrawRectangle(Rectangle collisionBox, SpriteBatch spriteBatch, Vector2 vectorOffSet)
+        {
+            Vector2 colBoxPos = new Vector2(collisionBox.X, collisionBox.Y) + vectorOffSet;
+
+            Rectangle topLine = new Rectangle((int)colBoxPos.X, (int)colBoxPos.Y, collisionBox.Width, 1);
+            Rectangle bottomLine = new Rectangle((int)colBoxPos.X, (int)colBoxPos.Y + collisionBox.Height, collisionBox.Width, 1);
+            Rectangle rightLine = new Rectangle((int)colBoxPos.X + collisionBox.Width, (int)colBoxPos.Y, 1, collisionBox.Height);
+            Rectangle leftLine = new Rectangle((int)colBoxPos.X, (int)colBoxPos.Y, 1, collisionBox.Height);
 
             spriteBatch.Draw(texture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
             spriteBatch.Draw(texture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);

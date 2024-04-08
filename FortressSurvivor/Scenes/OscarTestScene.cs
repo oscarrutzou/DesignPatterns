@@ -34,7 +34,7 @@ namespace FortressSurvivor
             GameObject enemyGo = new GameObject();
             enemyGo.AddComponent<SpriteRenderer>().SetLayerDepth(LAYERDEPTH.Enemies);
             enemyGo.AddComponent<Enemy>(grid, new Point(1, 1));
-            enemyGo.AddComponent<Collider>();
+            enemyGo.AddComponent<Collider>().SetCollisionBox(50, 50);
             enemyGo.AddComponent<HealthDamage>();
 
             Instantiate(enemyGo);
@@ -61,8 +61,13 @@ namespace FortressSurvivor
 
         private GameObject SpawnPlayer()
         {
+            GameObject fogOfWar = new GameObject();
+
+            fogOfWar.AddComponent<SpriteRenderer>();
+            fogOfWar.AddComponent<FogOfWar>();
+            Instantiate(fogOfWar);
             GameObject playerGo = new GameObject();
-            playerGo.AddComponent<Player>();
+            playerGo.AddComponent<Player>(fogOfWar);
             playerGo.AddComponent<SpriteRenderer>();
             playerGo.AddComponent<Collider>();
             playerGo.AddComponent<HealthDamage>();

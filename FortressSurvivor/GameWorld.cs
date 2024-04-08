@@ -43,7 +43,7 @@ namespace FortressSurvivor
             //GlobalAnimations.LoadContent();
 
             GenerateScenes();
-            currentScene = scenes[ScenesNames.AsserTestScene];
+            currentScene = scenes[ScenesNames.OscarTestScene];
             currentScene.Initialize();
 
 
