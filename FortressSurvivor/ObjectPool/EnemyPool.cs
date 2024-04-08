@@ -14,7 +14,7 @@ namespace FortressSurvivor
         public static EnemyPool Instance { get { return instance ??= new EnemyPool(); } }
 
         private static Random rnd = new Random();
-        public int maxAmount = 15;
+        public int maxAmount = 45;
 
         protected override GameObject CreateObject()
         {
