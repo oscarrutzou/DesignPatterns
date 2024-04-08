@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace FortressSurvivor
 {
@@ -114,17 +115,19 @@ namespace FortressSurvivor
                             int tempY = (int)(y * scale.Y);
                             Vector2 rectanglePos = new Vector2(tempX + cellVec.X, tempY + cellVec.Y);
 
-                            //// Calculate the pixel's position relative to the center of the sprite
-                            //Vector2 relativePos = rectanglePos - new Vector2(spriteWidth * scale.X / 2f, spriteHeight * scale.Y / 2f);
-                            //// Rotate the relative position by the sprite's rotation angle
-                            //float cos = MathF.Cos(GameObject.Transform.Rotation);
-                            //float sin = MathF.Sin(GameObject.Transform.Rotation);
-                            //Vector2 rotatedRelativePos = new Vector2(cos * relativePos.X - sin * relativePos.Y, sin * relativePos.X + cos * relativePos.Y);
-                            //// Add the sprite's position to get the pixel's position in world coordinates
-                            //Vector2 pixelPos = rotatedRelativePos + GameObject.Transform.Position;
 
-                            RectangleData rd = new RectangleData((int)rectanglePos.X, (int)rectanglePos.Y);
+                            // Calculate the pixel's position relative to the center of the sprite
+                            Vector2 relativePos = rectanglePos - new Vector2(spriteWidth * scale.X / 2f, spriteHeight * scale.Y / 2f);
+                            // Rotate the relative position by the sprite's rotation angle
+                            float cos = MathF.Cos(GameObject.Transform.Rotation);
+                            float sin = MathF.Sin(GameObject.Transform.Rotation);
+                            Vector2 rotatedRelativePos = new Vector2(cos * relativePos.X - sin * relativePos.Y, sin * relativePos.X + cos * relativePos.Y);
+                            // Add the sprite's position with the 
+                            Vector2 pixelPos = rotatedRelativePos + new Vector2(spriteWidth / 2, spriteHeight / 2);
+
+                            RectangleData rd = new RectangleData((int)pixelPos.X, (int)pixelPos.Y);
                             pixels.Add(rd);
+
                         }
                     }
                 }

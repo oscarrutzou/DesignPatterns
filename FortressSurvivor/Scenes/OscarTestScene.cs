@@ -27,8 +27,8 @@ namespace FortressSurvivor
             grid = gridGameobject.AddComponent<Grid>();
             grid.GenerateGrid(Vector2.Zero, 5, 5);
 
-            //astarGameobject = new GameObject();
-            //astar = new Astar(astarGameobject, grid);
+            astarGameobject = new GameObject();
+            astar = new Astar(astarGameobject, grid);
 
 
             GameObject currencyCounter = new GameObject();
@@ -46,8 +46,8 @@ namespace FortressSurvivor
             //InputHandler.Instance.AddButtonDownCommand(Keys.F, new WaveCommand());
             //InputHandler.Instance.AddButtonDownCommand(Keys.K, new UpgradeCommand(player));
 
-            //InputHandler.Instance.AddUpdateCommand(Keys.Q, new AstarTestCommand(astar, grid));
-            InputHandler.Instance.AddButtonDownCommand(Keys.Space, new ShootCommand(player)); //Got called twice? 
+            InputHandler.Instance.AddUpdateCommand(Keys.Q, new AstarTestCommand(astar, grid));
+            InputHandler.Instance.AddButtonDownCommand(Keys.Space, new ShootCommand(player)); 
 
         }
 
