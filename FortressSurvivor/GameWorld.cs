@@ -92,6 +92,7 @@ namespace FortressSurvivor
                 transformMatrix: uiCam.GetMatrix());
 
             currentScene.DrawOnScreen(_spriteBatch);
+            
             _spriteBatch.End();
 
             base.Draw(gameTime);

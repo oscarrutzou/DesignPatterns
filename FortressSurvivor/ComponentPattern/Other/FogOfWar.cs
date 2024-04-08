@@ -11,5 +11,13 @@ namespace FortressSurvivor
         public FogOfWar(GameObject gameObject) : base(gameObject)
         {
         }
+
+        public override void Start()
+        {
+            SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>();
+            sr.SetSprite("FogofWar");
+        }
     }
+
+
 }
