@@ -48,5 +48,12 @@ namespace FortressSurvivor
             return go;
         }
 
+        public GameObject Create(Grid grid, Point point)
+        {
+            GameObject go = new GameObject();
+
+            return go;
+        }
+
     }
 }

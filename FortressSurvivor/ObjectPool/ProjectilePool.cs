@@ -13,12 +13,12 @@ namespace FortressSurvivor
 
         public static ProjectilePool Instance { get { return instance ??= new ProjectilePool(); } }
         
-        protected override void CleanUp(GameObject gameObject)
+        public override void CleanUp(GameObject gameObject)
         {
             
         }
 
-        protected override GameObject CreateObject()
+        public override GameObject CreateObject()
         {
             return ProjectileFactory.Instance.Create();
         }

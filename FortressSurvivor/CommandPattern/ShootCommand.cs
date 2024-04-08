@@ -17,6 +17,7 @@ namespace FortressSurvivor
         public void Execute()
         {
             player.Shoot();
+
         }
     }
 }

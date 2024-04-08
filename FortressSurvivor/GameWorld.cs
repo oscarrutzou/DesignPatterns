@@ -22,13 +22,7 @@ namespace FortressSurvivor
         public static float DeltaTime { get; private set; }
         public GraphicsDeviceManager gfxManager { get; private set; }
         private SpriteBatch _spriteBatch;
-        
-        private List<IObserver> observers = new List<IObserver>();
 
-
-
-        private float timeSpawn;
-        private float timeBetweenSpawn;
 
         private GameWorld()
         {
@@ -40,9 +34,6 @@ namespace FortressSurvivor
 
         protected override void Initialize()
         {
-
-           
-
             ResolutionSize(1280, 720);
             //Fullscreen();
             worldCam = new Camera(true);

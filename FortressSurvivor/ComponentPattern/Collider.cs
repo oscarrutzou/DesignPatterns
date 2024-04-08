@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace FortressSurvivor
 {
@@ -62,6 +61,9 @@ namespace FortressSurvivor
 
         private void DrawRectangle(Rectangle collisionBox, SpriteBatch spriteBatch)
         {
+            // Still missing if the spriterenderer isnt IsCentered. 
+            // Fix by make a Vector2 that uses the point * (scale + origin)
+            // Same fix in the pixelperfect
             Rectangle topLine = new Rectangle(collisionBox.X, collisionBox.Y, collisionBox.Width, 1);
             Rectangle bottomLine = new Rectangle(collisionBox.X, collisionBox.Y + collisionBox.Height, collisionBox.Width, 1);
             Rectangle rightLine = new Rectangle(collisionBox.X + collisionBox.Width, collisionBox.Y, 1, collisionBox.Height);
@@ -72,29 +74,20 @@ namespace FortressSurvivor
             spriteBatch.Draw(texture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
             spriteBatch.Draw(texture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
         }
+
+        /// <summary>
+        /// Create pixel perfect collision, and 
+        /// </summary>
+        /// <returns></returns>
         private List<RectangleData> CreateRectangles()
         {
             texture = GameWorld.Instance.Content.Load<Texture2D>("Pixel");
             List<Color[]> lines = new List<Color[]>();
             List<RectangleData> pixels = new List<RectangleData>();
 
-            Vector2 cellVec = Vector2.Zero;
-            Cell cell = GameObject.GetComponent<Cell>() as Cell;
-
-
             Vector2 scale = GameObject.Transform.Scale;
             int spriteWidth = spriteRenderer.Sprite.Width;
             int spriteHeight = spriteRenderer.Sprite.Height;
-
-            if (cell != null)
-            {
-                //Fix this:DDDD
-                //Set the cell to the right bottom 
-                cellVec = new Vector2(Cell.demension * GameObject.Transform.Scale.X / 2 + (Cell.demension / 2), Cell.demension * GameObject.Transform.Scale.Y / 2 + (Cell.demension / 2));
-
-                //Move one cell up and left
-                cellVec -= new Vector2(Cell.demension * GameObject.Transform.Scale.X, Cell.demension * GameObject.Transform.Scale.Y);
-            }
 
             for (int y = 0; y < spriteHeight; y++)
             {
@@ -113,7 +106,7 @@ namespace FortressSurvivor
                         {
                             int tempX = (int)(x * scale.X);
                             int tempY = (int)(y * scale.Y);
-                            Vector2 rectanglePos = new Vector2(tempX + cellVec.X, tempY + cellVec.Y);
+                            Vector2 rectanglePos = new(tempX, tempY);
 
 
                             // Calculate the pixel's position relative to the center of the sprite

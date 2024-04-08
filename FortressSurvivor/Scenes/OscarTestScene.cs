@@ -24,14 +24,16 @@ namespace FortressSurvivor
 
             gridGameobject = new GameObject();
             grid = gridGameobject.AddComponent<Grid>();
-            grid.GenerateGrid(Vector2.Zero, 20, 20);
+            grid.GenerateGrid(Vector2.Zero, 5, 5);
 
             astarGameobject = new GameObject();
             astar = new Astar(astarGameobject, grid);
 
+            Instantiate(EnemyPool.Instance.CreateObject());
+
             GameObject enemyGo = new GameObject();
             enemyGo.AddComponent<SpriteRenderer>().SetLayerDepth(LAYERDEPTH.Enemies);
-            enemyGo.AddComponent<Enemy>(grid, new Point(1,1));
+            enemyGo.AddComponent<Enemy>(grid, new Point(1, 1));
             enemyGo.AddComponent<Collider>();
             enemyGo.AddComponent<HealthDamage>();
 

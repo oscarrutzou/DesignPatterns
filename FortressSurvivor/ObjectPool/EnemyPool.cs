@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FortressSurvivor
 {
-     class EnemyPool : ObjectPool
+    public class EnemyPool : ObjectPool
     {
 
         private static EnemyPool instance;
@@ -16,13 +15,14 @@ namespace FortressSurvivor
         private static Random rnd = new Random();
         public int maxAmount = 15;
 
-        protected override GameObject CreateObject()
+        public override GameObject CreateObject()
         {
             return EnemyFactory.Instance.Create(); 
         }
 
+        public GameObject CreateObject(Grid grid, Point point) => EnemyFactory.Instance.Create(grid, point);
 
-        protected override void CleanUp(GameObject gameObject)
+        public override void CleanUp(GameObject gameObject)
         {
            
         }

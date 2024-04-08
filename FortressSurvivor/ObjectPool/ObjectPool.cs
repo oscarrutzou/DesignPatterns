@@ -29,12 +29,12 @@ namespace FortressSurvivor
         {
             active.Remove(gameObject);
             inactive.Push(gameObject);
-            GameWorld.Instance.Destroy(gameObject);
+            GameWorld.Instance.Destroy(gameObject); //Removes gameobject from 
             CleanUp(gameObject);
         }
 
-        protected abstract GameObject CreateObject();
+        public abstract GameObject CreateObject();
 
-        protected abstract void CleanUp(GameObject gameObject);
+        public abstract void CleanUp(GameObject gameObject);
     }
 }
