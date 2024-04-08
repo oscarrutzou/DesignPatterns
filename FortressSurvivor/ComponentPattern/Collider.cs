@@ -17,7 +17,7 @@ namespace FortressSurvivor
             get
             {
                 int width, height;
-
+                
                 width = collisionWidth > 0 ? collisionWidth : spriteRenderer.Sprite.Width; 
                 height = collisionHeight > 0 ? collisionHeight : spriteRenderer.Sprite.Height;
 
@@ -49,31 +49,31 @@ namespace FortressSurvivor
 
         public override void Update(GameTime gameTime)
         {
-            UpdatePixelCollider();
+            //UpdatePixelCollider();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            DrawRectangle(CollisionBox, spriteBatch, offset);
+            //DrawRectangle(CollisionBox, spriteBatch, offset);
 
-            if (rectanglesData.IsValueCreated)
-            {
-                foreach (RectangleData rectangleData in rectanglesData.Value)
-                {
-                    DrawRectangle(rectangleData.Rectangle, spriteBatch, Vector2.Zero);
-                }
-            }
+            //if (rectanglesData.IsValueCreated)
+            //{
+            //    foreach (RectangleData rectangleData in rectanglesData.Value)
+            //    {
+            //        DrawRectangle(rectangleData.Rectangle, spriteBatch, Vector2.Zero);
+            //    }
+            //}
         }
 
         public void SetCollisionBox(int width, int height)
         {
-            collisionHeight = width;
+            collisionWidth = width;
             collisionHeight = height;
         }
 
         public void SetCollisionBox(int width, int height, Vector2 offset)
         {
-            collisionHeight = width;
+            collisionWidth = width;
             collisionHeight = height;
             this.offset = offset;
         }
@@ -87,14 +87,14 @@ namespace FortressSurvivor
             Rectangle rightLine = new Rectangle((int)colBoxPos.X + collisionBox.Width, (int)colBoxPos.Y, 1, collisionBox.Height);
             Rectangle leftLine = new Rectangle((int)colBoxPos.X, (int)colBoxPos.Y, 1, collisionBox.Height);
 
-            spriteBatch.Draw(texture, topLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
-            spriteBatch.Draw(texture, bottomLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
-            spriteBatch.Draw(texture, rightLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
-            spriteBatch.Draw(texture, leftLine, null, Color.Red, 0, Vector2.Zero, SpriteEffects.None, 1);
+            spriteBatch.Draw(texture, topLine, null, Color.Red, 0, Vector2.Zero, spriteRenderer.SpriteEffects, 1);
+            spriteBatch.Draw(texture, bottomLine, null, Color.Red, 0, Vector2.Zero, spriteRenderer.SpriteEffects, 1);
+            spriteBatch.Draw(texture, rightLine, null, Color.Red, 0, Vector2.Zero, spriteRenderer.SpriteEffects, 1);
+            spriteBatch.Draw(texture, leftLine, null, Color.Red, 0, Vector2.Zero, spriteRenderer.SpriteEffects, 1);
         }
 
         /// <summary>
-        /// Create pixel perfect collision, and 
+        /// Create pixel perfect collision
         /// </summary>
         /// <returns></returns>
         private List<RectangleData> CreateRectangles()
@@ -124,8 +124,13 @@ namespace FortressSurvivor
                         {
                             int tempX = (int)(x * scale.X);
                             int tempY = (int)(y * scale.Y);
-                            Vector2 rectanglePos = new(tempX, tempY);
+                            
+                            if (spriteRenderer.SpriteEffects == SpriteEffects.FlipHorizontally) // Dosent work.
+                            {
+                                tempX = spriteWidth - tempX - 1;
+                            }
 
+                            Vector2 rectanglePos = new(tempX, tempY);
 
                             // Calculate the pixel's position relative to the center of the sprite
                             Vector2 relativePos = rectanglePos - new Vector2(spriteWidth * scale.X / 2f, spriteHeight * scale.Y / 2f);

@@ -13,6 +13,7 @@ namespace FortressSurvivor
     {
         Cell,
         Player,
+        Projectiles,
         Enemy,
         Gui,
         Default, //Not set

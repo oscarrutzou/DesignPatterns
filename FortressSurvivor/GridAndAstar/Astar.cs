@@ -13,6 +13,9 @@ namespace FortressSurvivor
         private HashSet<GameObject> open;
         private HashSet<GameObject> closed;
 
+        public Astar(GameObject gameObject) : base(gameObject)
+        {
+        }
 
         public Astar(GameObject gameObject, Grid grid) : base(gameObject)
         {
@@ -51,18 +54,18 @@ namespace FortressSurvivor
 
                 Cell newCurCell = curCellGo.GetComponent<Cell>();
 
-                if (newCurCell.gridPosition.X == goal.X && newCurCell.gridPosition.Y == goal.Y)
+                if (newCurCell.GameObject.Transform.GridPosition.X == goal.X && newCurCell.GameObject.Transform.GridPosition.Y == goal.Y)
                 {
                     //path found!
                     return RetracePath(cells[start], cells[goal]);
                 }
 
-                List<GameObject> neighbors = GetNeighbors(newCurCell.gridPosition);
+                List<GameObject> neighbors = GetNeighbors(newCurCell.GameObject.Transform.GridPosition);
 
                 foreach (GameObject neighborGo in neighbors)
                 {
                     if (closed.Contains(neighborGo)) continue;
-                    int newMovementCostToNeighbor = newCurCell.G + newCurCell.cost + GetDistance(newCurCell.gridPosition, newCurCell.gridPosition);
+                    int newMovementCostToNeighbor = newCurCell.G + newCurCell.cost + GetDistance(newCurCell.GameObject.Transform.GridPosition, newCurCell.GameObject.Transform.GridPosition);
 
                     Cell neighbor = neighborGo.GetComponent<Cell>();
 
@@ -70,7 +73,7 @@ namespace FortressSurvivor
                     {
                         neighbor.G = newMovementCostToNeighbor;
                         //calulate h using manhatten principle
-                        neighbor.H = ((Math.Abs(neighbor.gridPosition.X - goal.X) + Math.Abs(goal.Y - neighbor.gridPosition.Y)) * 10);
+                        neighbor.H = ((Math.Abs(neighbor.GameObject.Transform.GridPosition.X - goal.X) + Math.Abs(goal.Y - neighbor.GameObject.Transform.GridPosition.Y)) * 10);
 
                         neighbor.Parent = curCellGo;
 
@@ -105,10 +108,10 @@ namespace FortressSurvivor
             path.Add(startPoint);
             path.Reverse();
 
-            foreach (GameObject go in path)
-            {
-                go.GetComponent<SpriteRenderer>().Color = Color.Aqua;
-            }
+            //foreach (GameObject go in path)
+            //{
+            //    go.GetComponent<SpriteRenderer>().Color = Color.Aqua;
+            //}
 
             return path;
         }

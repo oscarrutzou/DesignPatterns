@@ -12,11 +12,11 @@ namespace FortressSurvivor
     {
         public List<GameObject> active = new List<GameObject>();
 
-        protected Stack<GameObject> inactive = new Stack<GameObject>();
-
-        public GameObject GetObject()
+        public Stack<GameObject> inactive { get; protected set; } = new Stack<GameObject>();
+        public int maxAmount = 10;
+        public virtual GameObject GetObject()
         {
-            if (inactive.Count==0)
+            if (inactive.Count == 0)
             {
                 return CreateObject();
             }
@@ -25,11 +25,11 @@ namespace FortressSurvivor
             return go;
         }
 
-        public void ReleaseObject(GameObject gameObject)
+        public virtual void ReleaseObject(GameObject gameObject)
         {
             active.Remove(gameObject);
             inactive.Push(gameObject);
-            GameWorld.Instance.Destroy(gameObject); //Removes gameobject from 
+            GameWorld.Instance.Destroy(gameObject); //Removes gameobject
             CleanUp(gameObject);
         }
 

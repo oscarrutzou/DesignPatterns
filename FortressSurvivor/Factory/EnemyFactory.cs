@@ -48,9 +48,15 @@ namespace FortressSurvivor
             return go;
         }
 
-        public GameObject Create(Grid grid, Point point)
+        public GameObject Create(Grid grid, GameObject towerGameObject, Point point)
         {
             GameObject go = new GameObject();
+
+            go.AddComponent<SpriteRenderer>().SetLayerDepth(LAYERDEPTH.Enemies);
+            go.AddComponent<Enemy>().SetStartPositions(grid, towerGameObject, point);
+            go.AddComponent<Astar>(grid);
+            go.AddComponent<Collider>();
+            go.AddComponent<Stats>(100, 25);
 
             return go;
         }

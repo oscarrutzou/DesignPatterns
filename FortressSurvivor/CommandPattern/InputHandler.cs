@@ -14,6 +14,8 @@ namespace FortressSurvivor
 
         private Dictionary<Keys, ICommand> keybindsUpdate = new Dictionary<Keys, ICommand>();
         private Dictionary<Keys, ICommand> keybindsButtonDown = new Dictionary<Keys, ICommand>();
+        private Dictionary<ButtonState, ICommand> mouseButtonUpdateCommands = new Dictionary<ButtonState, ICommand>();
+        private Dictionary<ButtonState, ICommand> mouseButtonDownCommands = new Dictionary<ButtonState, ICommand>();
 
         public Vector2 mouseInWorld, mouseOnUI;
         public bool mouseOutOfBounds;
@@ -35,6 +37,16 @@ namespace FortressSurvivor
             keybindsButtonDown.Add(inputKey, command);
         }
 
+        public void AddUpdateCommand(ButtonState inputButton, ICommand command)
+        {
+            mouseButtonUpdateCommands.Add(inputButton, command);
+        }
+
+        public void AddButtonDownCommand(ButtonState inputButton, ICommand command)
+        {
+            mouseButtonDownCommands.Add(inputButton, command);
+        }
+
         private KeyboardState previousKeyState;
         private MouseState previousMouseState;
         public void Update()
@@ -46,6 +58,7 @@ namespace FortressSurvivor
             mouseOnUI = GetMousePositionOnUI(mouseState);
 
             UpdateKeyAndCommands(keyState);
+            UpdateMouseCommands(mouseState);
 
             previousKeyState = keyState;
             previousMouseState = mouseState;
@@ -70,6 +83,23 @@ namespace FortressSurvivor
             }
         }
 
+        private void UpdateMouseCommands(MouseState mouseState)
+        {
+            // Check the left mouse button
+            if (mouseState.LeftButton == ButtonState.Pressed && mouseButtonUpdateCommands.TryGetValue(ButtonState.Pressed, out ICommand cmd))
+            {
+                cmd.Execute();
+            }
+
+            if (previousMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed && mouseButtonDownCommands.TryGetValue(ButtonState.Pressed, out ICommand cmdBd))
+            {
+                cmdBd.Execute();
+            }
+
+            // Repeat similar checks for other button clicks.
+
+            previousMouseState = mouseState;
+        }
 
         #endregion
 

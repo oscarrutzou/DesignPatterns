@@ -9,10 +9,10 @@ namespace FortressSurvivor
     internal class UpgradeCommand : ICommand
     {
       
-        private HealthDamage playerHealthDamage;
+        private Stats playerHealthDamage;
         public UpgradeCommand(Player player)
         {
-           playerHealthDamage = player.GameObject.GetComponent<HealthDamage>() as HealthDamage;
+           playerHealthDamage = player.GameObject.GetComponent<Stats>() as Stats;
 
         }
         public void Execute()

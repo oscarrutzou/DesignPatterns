@@ -1,9 +1,7 @@
-﻿using FortressSurvivor.CommandPattern;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
 
 namespace FortressSurvivor
@@ -34,8 +32,8 @@ namespace FortressSurvivor
 
         protected override void Initialize()
         {
-            ResolutionSize(1280, 720);
-            //Fullscreen();
+            //ResolutionSize(1280, 720);
+            Fullscreen();
             worldCam = new Camera(true);
             uiCam = new Camera(false);
 

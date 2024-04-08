@@ -32,14 +32,14 @@ namespace FortressSurvivor
             enemyGo.AddComponent<SpriteRenderer>().SetLayerDepth(LAYERDEPTH.Enemies);
             enemyGo.AddComponent<Enemy>(grid, new Point(1, 1));
             enemyGo.AddComponent<Collider>();
-            enemyGo.AddComponent<HealthDamage>();
+            enemyGo.AddComponent<Stats>();
 
             Instantiate(enemyGo);
 
             GameObject currencyCounter = new GameObject();
             currencyCounter.Type = GameObjectTypes.Gui;
             currencyCounter.AddComponent<SpriteRenderer>();
-            currencyCounter.AddComponent<Currency>();
+            currencyCounter.AddComponent<TowerHealthUI>();
             Instantiate(currencyCounter);
 
 
@@ -67,7 +67,7 @@ namespace FortressSurvivor
             playerGo.AddComponent<Player>(fogOfWar);
             playerGo.AddComponent<SpriteRenderer>();
             playerGo.AddComponent<Collider>();
-            playerGo.AddComponent<HealthDamage>();
+            playerGo.AddComponent<Stats>();
             return playerGo;
         }
 

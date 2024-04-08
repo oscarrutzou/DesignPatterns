@@ -9,6 +9,7 @@ namespace FortressSurvivor
         public Vector2 startPostion { get;  set; }
 
         public Dictionary<Point, GameObject> Cells { get; private set; } = new Dictionary<Point, GameObject>();
+        public List<Point> TargetPoints { get; private set; } = new List<Point>(); //Target cell points
         private int width, height;
         
         public int mapW, mapH;
@@ -16,6 +17,7 @@ namespace FortressSurvivor
         private bool isCentered = true;
 
         private int demension => Cell.demension;
+
         public Grid(GameObject gameObject) : base(gameObject)
         {
 
@@ -46,7 +48,7 @@ namespace FortressSurvivor
                     Point point = new Point(x, y);
                     GameObject cellGo = new GameObject();
                     cellGo.AddComponent<Cell>(this, point);
-                    //cellGo.AddComponent<Collider>();
+                    cellGo.Type = GameObjectTypes.Cell;
                     SpriteRenderer sr = cellGo.AddComponent<SpriteRenderer>();
                     sr.SetLayerDepth(LAYERDEPTH.WorldBackground);
                     sr.SetSprite("World\\16x16White");

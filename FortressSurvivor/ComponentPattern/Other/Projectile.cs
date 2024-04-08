@@ -8,18 +8,28 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor
 {
-     class Projectile : Component
+    public class Projectile : Component
     {
         
 
         private float speed;
 
         private Vector2 direction;
-
+        private Stats stats;
         public Projectile(GameObject gameObject) : base(gameObject)
         {
-            this.speed = 100;
+        }
 
+        public Projectile(GameObject gameObject, Stats stats) : base(gameObject)
+        {
+            this.stats = stats;
+            this.speed = 400;
+            SetDirection();
+        }
+
+        
+        private void SetDirection()
+        {
             direction = (InputHandler.Instance.mouseOnUI) - GameObject.Transform.Position;
             if (direction != Vector2.Zero) direction.Normalize();
 
@@ -54,5 +64,19 @@ namespace FortressSurvivor
                 GameWorld.Instance.Destroy(GameObject);
             }
         }
+
+        private bool colCalled;
+        public override void OnCollisionEnter(Collider collider)
+        {
+            if (colCalled) return;
+            if (collider.GameObject.GetComponent<Enemy>() != null)
+            {
+                GameWorld.Instance.Destroy(GameObject);
+                stats.DealDamage(collider.GameObject);
+                colCalled = true;
+            }
+        }
+
+
     }
 }

@@ -1,21 +1,22 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace FortressSurvivor
 {
-    public class Currency : Component, IObserver
+    public class TowerHealthUI : Component
     {
-        public int money;
+        public int gealth;
         private SpriteFont font;
-
-        public Currency(GameObject gameObject) : base(gameObject)
+        private GameObject towerGo;
+        private Stats towerHealth;
+        public TowerHealthUI(GameObject gameObject) : base(gameObject)
         {
-            //Attach
+        }
+        public TowerHealthUI(GameObject gameObject, GameObject towerGo) : base(gameObject)
+        {
+            this.towerGo = towerGo;
+            towerHealth = towerGo.GetComponent<Stats>();
         }
 
         public override void Awake()
@@ -27,7 +28,8 @@ namespace FortressSurvivor
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(font, money.ToString(), GameWorld.Instance.uiCam.TopLeft, Color.Red);
+            spriteBatch.DrawString(font, towerHealth.health.ToString(), GameWorld.Instance.uiCam.TopLeft, Color.Red);
+            //spriteBatch.DrawString(font, $"{EnemyPool.Instance.active.Count} + inactive {EnemyPool.Instance.inactive.Count}", GameWorld.Instance.uiCam.TopLeft, Color.Red);
 
             // View how to use the uicam properties
             //spriteBatch.DrawString(font, money.ToString(), GameWorld.Instance.uiCam.TopLeft, Color.Red);
@@ -43,9 +45,6 @@ namespace FortressSurvivor
             //spriteBatch.DrawString(font, money.ToString(), GameWorld.Instance.uiCam.BottomRight - new Vector2(40, 40), Color.Red);
         }
 
-        public void Update()
-        {
-            money += 10;
-        }
+
     }
 }

@@ -12,27 +12,24 @@ namespace FortressSurvivor
     {
         private float speed;
         Animator animator;
-        private GameObject fogOfWarGo;
+        private GameObject fogOfWarGo, areaWorldColliderGo;
+        private Collider collider;
+
+        private bool canShoot = true;
+        private float lastShot = 0;
+        readonly float shootTimer = 1;
+        private Vector2 previousPos;
+
         public Player(GameObject gameObject) : base(gameObject)
         {
         }
 
-        public Player(GameObject gameObject, GameObject followObject) : base(gameObject)
+        public Player(GameObject gameObject, GameObject followObject, GameObject areaWorldColliderGo) : base(gameObject)
         {
             fogOfWarGo = followObject;
+            this.areaWorldColliderGo = areaWorldColliderGo;
         }
 
-        public void Move(Vector2 velocity)
-        {
-            if (velocity != Vector2.Zero)
-            {
-                velocity.Normalize();
-            }
-            //Check for the grid if its inside the castle cells
-            velocity *= speed;
-            GameObject.Transform.Translate(velocity * GameWorld.DeltaTime);
-            GameWorld.Instance.worldCam.Move(velocity * GameWorld.DeltaTime);
-        }
 
         public override void Awake()
         {
@@ -44,10 +41,47 @@ namespace FortressSurvivor
             SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>();
             sr.SetSprite("knight");
             sr.SetLayerDepth(LAYERDEPTH.Player);
+
+            collider = GameObject.GetComponent<Collider>();
         }
 
-        bool canShoot = true;
-        
+
+        public override void Update(GameTime gameTime)
+        {
+            fogOfWarGo.Transform.Position = GameObject.Transform.Position;
+
+            lastShot += GameWorld.DeltaTime;
+
+            if (lastShot > shootTimer)
+            {
+                canShoot = true;
+            }
+        }
+
+        public void Move(Vector2 velocity)
+        {
+            if (velocity != Vector2.Zero)
+            {
+                velocity.Normalize();
+            }
+            //Check for the grid if its inside the castle cells
+            CheckNewPosIsInsideTower(velocity * speed * GameWorld.DeltaTime);
+        }
+
+        private void CheckNewPosIsInsideTower(Vector2 newPos)
+        {
+            Vector2 prePos = GameObject.Transform.Position;
+            GameObject.Transform.Translate(newPos);
+
+            if (!areaWorldColliderGo.GetComponent<Collider>().CollisionBox.Contains(collider.CollisionBox)){
+                GameObject.Transform.Position = prePos;
+            }
+            else
+            {
+                GameObject.Transform.Translate(newPos);
+                GameWorld.Instance.worldCam.Move(newPos);
+            }
+        }
 
         public void Shoot()
         {
@@ -60,19 +94,13 @@ namespace FortressSurvivor
                 GameWorld.Instance.Instantiate(arrow);
             }
         }
-        
-        float lastShot = 0;
-        readonly float shootTimer = 1;
 
-        public override void Update(GameTime gameTime)
+
+        public override void OnCollisionEnter(Collider collider)
         {
-            fogOfWarGo.Transform.Position = GameObject.Transform.Position;
-
-            lastShot += GameWorld.DeltaTime;
-
-            if (lastShot > shootTimer)
+            if (areaWorldColliderGo == collider.GameObject)
             {
-                canShoot = true;
+
             }
         }
     }

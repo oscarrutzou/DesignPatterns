@@ -8,7 +8,7 @@ namespace FortressSurvivor
 {
     internal class ProjectilePool : ObjectPool
     {
-
+        // Isnt used yet
         private static ProjectilePool instance;
 
         public static ProjectilePool Instance { get { return instance ??= new ProjectilePool(); } }

@@ -13,8 +13,6 @@ namespace FortressSurvivor
         public int H;
         public int F => G + H;
 
-        public Point gridPosition;
-
         /// <summary>
         /// Parent is for the Astar, not the GameObject that is attached as "GameObject".
         /// </summary>
@@ -23,8 +21,8 @@ namespace FortressSurvivor
 
         public Cell(GameObject gameObject, Grid grid, Point point) : base(gameObject)
         {
-            this.gridPosition = point;
-            gameObject.Transform.Position = grid.startPostion + new Vector2(gridPosition.X * demension * scaleSize.X + demension * scaleSize.X / 2, gridPosition.Y * demension * scaleSize.Y + demension * scaleSize.Y / 2);
+            GameObject.Transform.GridPosition = point;
+            gameObject.Transform.Position = grid.startPostion + new Vector2(point.X * demension * scaleSize.X + demension * scaleSize.X / 2, point.Y * demension * scaleSize.Y + demension * scaleSize.Y / 2);
             GameObject.Transform.Scale = scaleSize;
         }
 

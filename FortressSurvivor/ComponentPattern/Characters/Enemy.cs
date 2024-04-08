@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+
 
 namespace FortressSurvivor
 {
@@ -13,18 +15,29 @@ namespace FortressSurvivor
         Down
     }
 
+    public enum EnemyState
+    {
+        WalkTowardsGoal,
+        Attack,
+    }
+
     public class Enemy : Component
     {
         private Vector2 direction, nextTarget;
-        private List<Cell> path;
+        public Point targetPos;
+        public List<GameObject> path { get; set; }
         public int speed = 100;
         private float threshold = 5f;
 
         public Action onGoalReached;
         public DirectionState directionState = DirectionState.Right;
-        public Point gridPosition;
+        public EnemyState enemyState = EnemyState.WalkTowardsGoal;
         private Grid grid;
-
+        private Astar astar;
+        private GameObject towerGameObject;
+        private Stats towerStats;
+        private SpriteRenderer spriteRenderer;
+        private Random rnd = new Random();
         //private Dictionary<DirectionState, Animation> animationsDict = new Dictionary<DirectionState, Animation>()
         //{
         //    {DirectionState.Left, GlobalAnimations.animations[AnimNames.WizardLeft] },
@@ -38,12 +51,14 @@ namespace FortressSurvivor
         {
         }
 
-        public Enemy(GameObject gameObject, Grid grid, Point gridPos) : base(gameObject)
+        public void SetStartPositions(Grid grid, GameObject towerObject, Point gridPos)
         {
             this.grid = grid;
-            gridPosition = gridPos;
+            this.towerGameObject = towerObject;
+            towerStats = towerGameObject.GetComponent<Stats>();
+            GameObject.Transform.GridPosition = gridPos;
         }
-
+        
         public override void Awake()
         {
             base.Awake();
@@ -51,91 +66,72 @@ namespace FortressSurvivor
 
         public override void Start()
         {
-            SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>();
-            sr.SetSprite("knight");
-            //sr.Origin = Vector2.Zero;
-            GameObject.Transform.Position = grid.GetCellGameObjectFromPoint(gridPosition).Transform.Position;
+            spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
+            astar = GameObject.GetComponent<Astar>();
+            spriteRenderer.SetSprite("knight");
+            GameObject.Transform.Position = grid.GetCellGameObjectFromPoint(GameObject.Transform.GridPosition).Transform.Position;
 
+            targetPos = grid.TargetPoints[rnd.Next(0, grid.TargetPoints.Count)];
+            onGoalReached += OnGoalReached;
+
+            SetPath();
         }
 
         public override void Update(GameTime gameTime)
         {
-            UpdatePathing(gameTime);
 
-            if (path == null)
+            switch (enemyState)
             {
-
+                case EnemyState.WalkTowardsGoal:
+                    UpdatePathing(gameTime);
+                    break;
+                case EnemyState.Attack:
+                    Attack();
+                    break;
             }
+
+
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
-
-        public override void OnCollisionEnter(Collider collider)
-        {
-            base.OnCollisionEnter(collider);
-        }
-
-
-        //public void ChangeAnimation(DirectionState directionState)
+        //public override void OnCollisionEnter(Collider collider)
         //{
-        //    animation = animationsDict[directionState];
-
-        //    animation.shouldPlay = true;
-        //    animation.frameRate = 8f;
-        //    animation.isLooping = true;
-        //}
-
-        //public override void Update()
-        //{
-        //    UpdatePathing();
-
-        //    if (path == null && animation.shouldPlay == true)
+        //    if (collider.GameObject.GetComponent<Projectile>() != null)
         //    {
-        //        RightStoppedAnimation();
+        //        EnemyPool.Instance.ReleaseObject(GameObject);
+        //        GameWorld.Instance.Destroy(collider.GameObject);
         //    }
-
         //}
 
-        //private void RightStoppedAnimation()
-        //{
-        //    animation = animationsDict[DirectionState.Right];
-        //    animation.currentFrame = 0;
-        //    animation.shouldPlay = false;
-        //}
 
-        public void UpdateDirection()
+        private void OnGoalReached()
         {
-            if (direction.X >= 0)
-            {
-                directionState = DirectionState.Right;
-            }
-            else if (direction.X < 0)
-            {
-                directionState = DirectionState.Left;
-            }
-            else if (direction.Y > 0)
-            {
-                directionState = DirectionState.Down;
-            }
-            else if (direction.Y < 0)
-            {
-                directionState = DirectionState.Up;
-            }
-
-            //ChangeAnimation(directionState);
+            enemyState = EnemyState.Attack;
+            spriteRenderer.SpriteEffects = SpriteEffects.None;
         }
 
-        public void SetPlayerPath(List<Cell> path)
+        #region PathFinding
+        private void SetPath()
         {
-            this.path = path;
+            MakePath();
+
             if (path.Count > 0)
             {
                 SetNextTargetPos(path[0]); // Set the next target
             }
         }
+
+        private void MakePath()
+        {
+            for (int i = 0; i < 3; i++) 
+            {
+                if (path != null && path.Count > 0) break;
+
+                path = astar.FindPath(GameObject.Transform.GridPosition, targetPos);
+            }
+            if (path == null) throw new Exception("Cant find a path");
+        }
+
+
         private void UpdatePathing(GameTime gameTime)
         {
             if (path == null)
@@ -147,13 +143,13 @@ namespace FortressSurvivor
             {
                 if (path.Count > 1) // Check if there's another cell in the path
                 {
-                    gridPosition = path[0].gridPosition; //So we update the grid position
+                    GameObject.Transform.GridPosition = path[0].Transform.GridPosition; //So we update the grid position
                     path.RemoveAt(0); // Remove the current target from the path
                     SetNextTargetPos(path[0]); // Set the next target
                 }
                 else if (path.Count == 1) // If it's the last cell in the path
                 {
-                    gridPosition = path[0].gridPosition; //So we update the grid position
+                    GameObject.Transform.GridPosition = path[0].Transform.GridPosition; //So we update the grid position
                     SetNextTargetPos(path[0]); // Set the last target
                     path.RemoveAt(0); // Remove the goal cell from the path
                 }
@@ -163,7 +159,7 @@ namespace FortressSurvivor
             direction = Vector2.Normalize(nextTarget - position);
 
             // Move the player towards the next target
-            position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            GameObject.Transform.Translate(direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             // Check if the player has reached the goal
             if (path.Count == 0 && Vector2.Distance(position, nextTarget) < threshold)
@@ -172,15 +168,53 @@ namespace FortressSurvivor
                 {
                     onGoalReached.Invoke();
                     onGoalReached = null; // Prevent onGoalReached from being called more than once
-                    path = null;
                 }
+
+                path = null;
             }
             UpdateDirection();
         }
 
-        private void SetNextTargetPos(Cell cell)
+        private void SetNextTargetPos(GameObject cellGo)
         {
-            nextTarget = cell.GameObject.Transform.Position + new Vector2(0, -Cell.demension / 2);
+            nextTarget = cellGo.Transform.Position + new Vector2(0, -Cell.demension / 2);
+        }
+        #endregion
+
+        private float attackTimer;
+        private readonly float attackCooldown = 2f;
+        private void Attack()
+        {
+            attackTimer -= GameWorld.DeltaTime;
+            
+            if (attackTimer < 0)
+            {
+                attackTimer = attackCooldown;
+                GameObject.GetComponent<Stats>().DealDamage(towerGameObject);
+            }
+        }
+
+        public void UpdateDirection()
+        {
+            if (direction.X >= 0)
+            {
+                directionState = DirectionState.Right;
+                spriteRenderer.SpriteEffects = SpriteEffects.None;
+
+            }
+            else if (direction.X < 0)
+            {
+                directionState = DirectionState.Left;
+                spriteRenderer.SpriteEffects = SpriteEffects.FlipHorizontally;
+            }
+            else if (direction.Y > 0)
+            {
+                directionState = DirectionState.Down;
+            }
+            else if (direction.Y < 0)
+            {
+                directionState = DirectionState.Up;
+            }
         }
     }
 }

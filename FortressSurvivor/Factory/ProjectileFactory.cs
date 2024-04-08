@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,12 +18,15 @@ namespace FortressSurvivor
         public override GameObject Create()
         {
             GameObject arrow = new GameObject();
+            arrow.Transform.Scale = new Vector2(0.4f, 0.4f);
             SpriteRenderer sr = arrow.AddComponent<SpriteRenderer>();
             sr.SetSprite("arrow1");
             sr.SetLayerDepth(LAYERDEPTH.Player);
-            arrow.AddComponent<Collider>();
-            arrow.AddComponent<Projectile>();
-            GameWorld.Instance.Instantiate(arrow);
+            arrow.AddComponent<Collider>().SetCollisionBox(30, 30);
+            Stats stats = arrow.AddComponent<Stats>();
+            stats.damage = 50;
+            arrow.AddComponent<Projectile>(stats);
+
             return arrow;
         }
 

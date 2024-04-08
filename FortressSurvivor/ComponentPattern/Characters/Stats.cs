@@ -6,46 +6,46 @@ using System.Threading.Tasks;
 
 namespace FortressSurvivor
 {
-    public class HealthDamage : Component
+    public class Stats : Component
     {
-        public int health;
-        public int damage;
+        public int health = 100;
+        public int damage = 10;
 
-        public HealthDamage(GameObject gameObject) : base(gameObject)
+        public Stats(GameObject gameObject) : base(gameObject)
         {
         }
 
-        public HealthDamage(GameObject gameObject, int health, int damage) : base(gameObject)
+        public Stats(GameObject gameObject, int health, int damage) : base(gameObject)
         {
             this.health = health;
             this.damage = damage;
         }
 
-        public void DealDamage(GameObject damageGo, int damage)
+        public void DealDamage(GameObject damageGo)
         {
-            HealthDamage damageGoHealth = damageGo.GetComponent<HealthDamage>();
+            Stats damageGoHealth = damageGo.GetComponent<Stats>();
             damageGoHealth.TakeDamage(damage);
         }
 
         private void TakeDamage(int damage)
         {
-            health -= damage;
+            int newHealth = health - damage;
+            
+            if (newHealth < 0) health = 0;
+            else health = newHealth;
+
             //Delete or add to pool.
             if (health > 0) return;
 
             Enemy enemy = GameObject.GetComponent<Enemy>();
             if (enemy != null)
             {
-
+                EnemyPool.Instance.ReleaseObject(GameObject);
             }
             else
             {
                 GameWorld.Instance.Destroy(GameObject);
             }
-            //else if (Game)
-            //{
-
-            //}
         }
     }
 }

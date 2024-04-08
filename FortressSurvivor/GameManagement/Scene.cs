@@ -39,10 +39,13 @@ namespace FortressSurvivor
         {
             CleanUp();
 
+            List<Projectile> projectiles = SceneData.projectiles;
             foreach (GameObject gameObject in SceneData.gameObjects)
             {
                 gameObject.Update(gameTime);
             }
+
+            CheckCollision();
         }
 
 
@@ -78,6 +81,9 @@ namespace FortressSurvivor
                 case GameObjectTypes.Cell:
                     SceneData.cells.Add(gameObject.GetComponent<Cell>());
                     break;
+                case GameObjectTypes.Projectiles:
+                    SceneData.projectiles.Add(gameObject.GetComponent<Projectile>());
+                    break;
                 case GameObjectTypes.Gui:
                     SceneData.guis.Add(gameObject);
                     break;
@@ -93,6 +99,9 @@ namespace FortressSurvivor
             {
                 case GameObjectTypes.Cell:
                     SceneData.cells.Remove(gameObject.GetComponent<Cell>());
+                    break;
+                case GameObjectTypes.Projectiles:
+                    SceneData.projectiles.Remove(gameObject.GetComponent<Projectile>());
                     break;
                 case GameObjectTypes.Gui:
                     SceneData.guis.Remove(gameObject);
@@ -126,6 +135,29 @@ namespace FortressSurvivor
             }
         }
 
+        public void CheckCollision()
+        {
+            foreach (GameObject go1 in SceneData.gameObjects)
+            {
+                foreach (GameObject go2 in SceneData.gameObjects)
+                {
+                    if (go1 == go2) continue;
+                    //Dosent check between enemies
+                    Enemy enemy1 = go1.GetComponent<Enemy>();
+                    Enemy enemy2 = go2.GetComponent<Enemy>();
+                    if (enemy1 != null && enemy2 != null) continue; //Shouldnt make collisions between 2 enemies.
 
+                    Collider col1 = go1.GetComponent<Collider>();
+                    Collider col2 = go2.GetComponent<Collider>();
+
+                    //Check base collisionbox
+                    if (col1 != null && col2 != null && col1.CollisionBox.Intersects(col2.CollisionBox))
+                    {
+                        go1.OnCollisionEnter(col2);
+                        go2.OnCollisionEnter(col1);
+                    }
+                }
+            }
+        }
     }
 }
