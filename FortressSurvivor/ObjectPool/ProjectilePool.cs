@@ -20,7 +20,7 @@ namespace FortressSurvivor
 
         protected override GameObject CreateObject()
         {
-            return new GameObject();
+            return ProjectileFactory.Instance.Create();
         }
     }
 }
