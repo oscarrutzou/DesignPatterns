@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace FortressSurvivor
 {
@@ -19,16 +20,18 @@ namespace FortressSurvivor
 
     public class SpriteRenderer : Component
     {
-        public SpriteRenderer(GameObject gameObject) : base(gameObject)
-        {
-        }
-
+        public Vector2 PositionCentered => new Vector2(GameObject.Transform.Position.X + Sprite.Width / 2, GameObject.Transform.Position.Y + Sprite.Height / 2);
         public Texture2D Sprite { get; set; }
         public Color Color { get; set; } = Color.White;
 
         public Vector2 Origin { get; set; }
         private float LayerDepth;
         public LAYERDEPTH LayerName { get; private set; } = LAYERDEPTH.Default;
+
+        public SpriteRenderer(GameObject gameObject) : base(gameObject)
+        {
+        }
+
 
         public override void Start()
         {

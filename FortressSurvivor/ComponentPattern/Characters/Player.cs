@@ -17,6 +17,10 @@ namespace FortressSurvivor
         {
         }
 
+        public Player(GameObject gameObject, GameObject followObject) : base(gameObject)
+        {
+        }
+
         public void Move(Vector2 velocity)
         {
             if (velocity != Vector2.Zero)
@@ -27,6 +31,7 @@ namespace FortressSurvivor
             velocity *= speed;
             GameObject.Transform.Translate(velocity * GameWorld.DeltaTime);
             GameWorld.Instance.worldCam.Move(velocity * GameWorld.DeltaTime);
+            
         }
 
         public override void Awake()
@@ -37,7 +42,7 @@ namespace FortressSurvivor
         public override void Start()
         {
             
-            SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
+            SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>();
             sr.SetSprite("knight");
             sr.SetLayerDepth(LAYERDEPTH.Player);
         }

@@ -18,8 +18,7 @@ namespace FortressSurvivor
 
         protected override GameObject CreateObject()
         {
-            // There cant be unused enemytypes, otherwise it will still be able to spawn those types that have not been set.
-            return EnemyFactory.Instance.CreateEnemy((ENEMYTYPE)rnd.Next(0, Enum.GetValues(typeof(ENEMYTYPE)).Length)); 
+            return EnemyFactory.Instance.Create(); 
         }
 
 

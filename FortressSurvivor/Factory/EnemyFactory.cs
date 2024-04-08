@@ -18,16 +18,13 @@ namespace FortressSurvivor
     {
         private static EnemyFactory instance;
         public static EnemyFactory Instance { get { return instance ??= new EnemyFactory(); } }
+        private Random rnd = new Random();
 
         public override GameObject Create()
         {
             GameObject go = new GameObject();
-            return go;
-        }
+            ENEMYTYPE type = (ENEMYTYPE)rnd.Next(0, Enum.GetValues(typeof(ENEMYTYPE)).Length);
 
-        public GameObject CreateEnemy(ENEMYTYPE type)
-        {
-            GameObject go = new GameObject();
             //SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
             //sr.SetLayerDepth(LAYERDEPTH.Enemy);
 
@@ -47,7 +44,9 @@ namespace FortressSurvivor
 
             //switch (type)
 
+
             return go;
         }
+
     }
 }
