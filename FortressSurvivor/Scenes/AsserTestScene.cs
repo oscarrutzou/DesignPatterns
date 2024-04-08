@@ -17,28 +17,33 @@ namespace FortressSurvivor
         private Astar astar;
         public override void Initialize()
         {
-            Director playerDirector = new Director(new PlayerBuilder());
-            GameObject playerGo = playerDirector.Contruct();
+            GameObject playerGo = SpawnPlayer();
             Instantiate(playerGo);
 
 
             gridGameobject = new GameObject();
             grid = gridGameobject.AddComponent<Grid>();
-            grid.GenerateGrid(Vector2.Zero, 5, 5);
+            grid.GenerateGrid(Vector2.Zero, 20, 20);
 
             astarGameobject = new GameObject();
             astar = new Astar(astarGameobject, grid);
 
+            GameObject enemyGo = new GameObject();
+            enemyGo.AddComponent<SpriteRenderer>().SetLayerDepth(LAYERDEPTH.Enemies);
+            enemyGo.AddComponent<Enemy>(grid, new Point(1, 1));
+            enemyGo.AddComponent<Collider>();
+            enemyGo.AddComponent<HealthDamage>();
+
+            Instantiate(enemyGo);
 
             GameObject currencyCounter = new GameObject();
             currencyCounter.Type = GameObjectTypes.Gui;
             currencyCounter.AddComponent<SpriteRenderer>();
             currencyCounter.AddComponent<Currency>();
             Instantiate(currencyCounter);
-            GameObject fog = new GameObject();
 
 
-            Player player = playerGo.GetComponent<Player>() as Player;
+            Player player = playerGo.GetComponent<Player>();
             InputHandler.Instance.AddUpdateCommand(Keys.D, new MoveCommand(player, new Vector2(1, 0)));
             InputHandler.Instance.AddUpdateCommand(Keys.A, new MoveCommand(player, new Vector2(-1, 0)));
             InputHandler.Instance.AddUpdateCommand(Keys.W, new MoveCommand(player, new Vector2(0, -1)));
@@ -49,6 +54,21 @@ namespace FortressSurvivor
             InputHandler.Instance.AddUpdateCommand(Keys.Q, new AstarTestCommand(astar, grid));
             InputHandler.Instance.AddButtonDownCommand(Keys.Space, new ShootCommand(player));
 
+        }
+
+        private GameObject SpawnPlayer()
+        {
+            GameObject fogOfWar = new GameObject();
+
+            fogOfWar.AddComponent<SpriteRenderer>();
+            fogOfWar.AddComponent<FogOfWar>();
+            Instantiate(fogOfWar);
+            GameObject playerGo = new GameObject();
+            playerGo.AddComponent<Player>(fogOfWar);
+            playerGo.AddComponent<SpriteRenderer>();
+            playerGo.AddComponent<Collider>();
+            playerGo.AddComponent<HealthDamage>();
+            return playerGo;
         }
 
         public override void Update(GameTime gameTime)
