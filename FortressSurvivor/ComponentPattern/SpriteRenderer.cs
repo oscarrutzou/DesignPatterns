@@ -29,9 +29,19 @@ namespace FortressSurvivor
         private float LayerDepth;
         public LAYERDEPTH LayerName { get; private set; } = LAYERDEPTH.Default;
         public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
+
+        public Rectangle SourceRectangle;
+        public bool UsingAnimation;
+        private Animator animator;
+
         public SpriteRenderer(GameObject gameObject) : base(gameObject)
         {
 
+        }
+
+        public override void Start()
+        {
+            animator = GameObject.GetComponent<Animator>();
         }
 
         public void SetLayerDepth(LAYERDEPTH layerName)
@@ -40,20 +50,30 @@ namespace FortressSurvivor
             LayerDepth = (float)LayerName / (Enum.GetNames(typeof(LAYERDEPTH)).Length - 1);
         }
 
+        private Vector2 drawPos;
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (Sprite == null) return;
 
             Origin = IsCentered ? new Vector2(Sprite.Width / 2, Sprite.Height / 2) : Vector2.Zero;
 
-            spriteBatch.Draw(Sprite, GameObject.Transform.Position, null, Color, GameObject.Transform.Rotation, Origin, GameObject.Transform.Scale, SpriteEffects, LayerDepth);
+            drawPos = GameObject.Transform.Position;
+            if (animator != null)
+            {
+                drawPos += new Vector2(animator.MaxFrames * animator.currentAnimation.FrameDimensions * GameObject.Transform.Scale.X / 2, 0);
+            }
+            //Draws the sprite, and if there is a sourcerectangle set, then it uses that.
+            spriteBatch.Draw(Sprite, drawPos, SourceRectangle == Rectangle.Empty ? null : SourceRectangle, Color, GameObject.Transform.Rotation, Origin, GameObject.Transform.Scale, SpriteEffects, LayerDepth);
+
 
         }  
 
-        public void SetSprite(string spriteName)
+        public void SetSprite(TextureNames spriteName)
         {
-            Sprite = GameWorld.Instance.Content.Load<Texture2D>(spriteName);
+            UsingAnimation = false;
+            Sprite = GlobalTextures.textures[spriteName];
         }
+
 
     }
 }

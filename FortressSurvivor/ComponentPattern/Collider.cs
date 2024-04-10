@@ -8,6 +8,7 @@ namespace FortressSurvivor
     public class Collider : Component
     {
         private SpriteRenderer spriteRenderer;
+        private Animator animator;
         private Texture2D texture;
         private int collisionWidth, collisionHeight; //If not set, use the sprite width and height
         private Vector2 offset;
@@ -16,10 +17,18 @@ namespace FortressSurvivor
         {
             get
             {
-                int width, height;
+                int width = 0, height = 0;
                 
-                width = collisionWidth > 0 ? collisionWidth : spriteRenderer.Sprite.Width; 
-                height = collisionHeight > 0 ? collisionHeight : spriteRenderer.Sprite.Height;
+                if (animator != null)
+                {
+                    width = collisionWidth > 0 ? collisionWidth : animator.currentAnimation.FrameDimensions;
+                    height = collisionHeight > 0 ? collisionHeight : animator.currentAnimation.FrameDimensions;
+                }
+                else
+                {
+                    width = collisionWidth > 0 ? collisionWidth : spriteRenderer.Sprite.Width; 
+                    height = collisionHeight > 0 ? collisionHeight : spriteRenderer.Sprite.Height;
+                }
 
                 return new Rectangle
                     (
@@ -38,13 +47,14 @@ namespace FortressSurvivor
         }
         public override void Start()
         {
+            animator = GameObject.GetComponent<Animator>();
             spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
             texture = GameWorld.Instance.Content.Load<Texture2D>("Pixel");
 
             rectanglesData = new Lazy<List<RectangleData>>(() => CreateRectangles());
 
             if (spriteRenderer == null) new Exception("The collision need a spriteRenderer to work");
-            var value = rectanglesData.Value;
+            
         }
 
         public override void Update(GameTime gameTime)
@@ -54,7 +64,7 @@ namespace FortressSurvivor
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //DrawRectangle(CollisionBox, spriteBatch, offset);
+            DrawRectangle(CollisionBox, spriteBatch, offset);
 
             //if (rectanglesData.IsValueCreated)
             //{

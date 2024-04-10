@@ -20,7 +20,7 @@ namespace FortressSurvivor
             GameObject arrow = new GameObject();
             arrow.Transform.Scale = new Vector2(0.4f, 0.4f);
             SpriteRenderer sr = arrow.AddComponent<SpriteRenderer>();
-            sr.SetSprite("arrow1");
+            sr.SetSprite(TextureNames.Arrow);
             sr.SetLayerDepth(LAYERDEPTH.Player);
             arrow.AddComponent<Collider>().SetCollisionBox(30, 30);
             Stats stats = arrow.AddComponent<Stats>();

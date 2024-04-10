@@ -22,9 +22,9 @@ namespace FortressSurvivor
         public override void Start()
         {
             
-            spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
-            spriteRenderer.SetSprite(Texture.Name); 
-            spriteRenderer.SetLayerDepth(LAYERDEPTH.Button);
+            //spriteRenderer = GameObject.AddComponent<SpriteRenderer>();
+        
+            //spriteRenderer.SetLayerDepth(LAYERDEPTH.Button);
         }
 
         public override void Update(GameTime gameTime)

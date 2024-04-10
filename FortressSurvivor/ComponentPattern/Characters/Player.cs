@@ -39,8 +39,12 @@ namespace FortressSurvivor
         public override void Start()
         {
             SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>();
-            sr.SetSprite("knight");
+            //sr.SetSprite(TextureNames.Knight);
             sr.SetLayerDepth(LAYERDEPTH.Player);
+
+            Animator animator = GameObject.GetComponent<Animator>();
+            animator.AddAnimation(GlobalAnimations.animations[AnimNames.WizardRight]);
+            animator.PlayAnimation(AnimNames.WizardRight);
 
             collider = GameObject.GetComponent<Collider>();
         }

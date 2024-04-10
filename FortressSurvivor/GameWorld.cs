@@ -37,8 +37,8 @@ namespace FortressSurvivor
             worldCam = new Camera(true);
             uiCam = new Camera(false);
 
-            //GlobalTextures.LoadContent();
-            //GlobalAnimations.LoadContent();
+            GlobalTextures.LoadContent();
+            GlobalAnimations.LoadContent();
 
             GenerateScenes();
             currentScene = scenes[ScenesNames.OscarTestScene];

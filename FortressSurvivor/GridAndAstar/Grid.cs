@@ -51,7 +51,7 @@ namespace FortressSurvivor
                     cellGo.Type = GameObjectTypes.Cell;
                     SpriteRenderer sr = cellGo.AddComponent<SpriteRenderer>();
                     sr.SetLayerDepth(LAYERDEPTH.WorldBackground);
-                    sr.SetSprite("World\\16x16White");
+                    sr.SetSprite(TextureNames.Cell);
 
                     if ((x + y) % 2 == 0) sr.Color = new Color(30, 150, 20); // Set color so every second one is colored
 

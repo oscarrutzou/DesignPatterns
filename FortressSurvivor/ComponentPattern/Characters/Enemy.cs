@@ -68,7 +68,7 @@ namespace FortressSurvivor
         {
             spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
             astar = GameObject.GetComponent<Astar>();
-            spriteRenderer.SetSprite("knight");
+            spriteRenderer.SetSprite(TextureNames.Knight);
             GameObject.Transform.Position = grid.GetCellGameObjectFromPoint(GameObject.Transform.GridPosition).Transform.Position;
 
             targetPos = grid.TargetPoints[rnd.Next(0, grid.TargetPoints.Count)];

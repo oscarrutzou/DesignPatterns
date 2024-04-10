@@ -18,7 +18,7 @@ namespace FortressSurvivor
         public override void Start()
         {
             SpriteRenderer sr = GameObject.GetComponent<SpriteRenderer>();
-            sr.SetSprite("FogofWar");
+            sr.SetSprite(TextureNames.FogOfWar);
             sr.SetLayerDepth(LAYERDEPTH.Button);
             
         }

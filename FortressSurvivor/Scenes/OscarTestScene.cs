@@ -118,15 +118,17 @@ namespace FortressSurvivor
             Instantiate(fogOfWar);
 
             towerGameObject = new GameObject();
-            towerGameObject.AddComponent<SpriteRenderer>().SetSprite("Pixel");
+            towerGameObject.AddComponent<SpriteRenderer>().SetSprite(TextureNames.Pixel);
             int collisionBoxDem = Cell.demension * (int)Cell.scaleSize.X * 4;
             towerGameObject.AddComponent<Collider>().SetCollisionBox(collisionBoxDem, collisionBoxDem);
             towerStats = towerGameObject.AddComponent<Stats>(1000, 0);
             Instantiate(towerGameObject);
 
             GameObject playerGo = new GameObject();
-            playerGo.AddComponent<Player>(fogOfWar, towerGameObject);
+            playerGo.Transform.Scale = new Vector2(4, 4);
             playerGo.AddComponent<SpriteRenderer>();
+            playerGo.AddComponent<Animator>();
+            playerGo.AddComponent<Player>(fogOfWar, towerGameObject);
             playerGo.AddComponent<Collider>();
             playerGo.AddComponent<Stats>();
             return playerGo;
