@@ -54,7 +54,7 @@ namespace FortressSurvivor
             rectanglesData = new Lazy<List<RectangleData>>(() => CreateRectangles());
 
             if (spriteRenderer == null) new Exception("The collision need a spriteRenderer to work");
-            
+            var val = rectanglesData.Value;
         }
 
         public override void Update(GameTime gameTime)
@@ -139,6 +139,8 @@ namespace FortressSurvivor
                             {
                                 tempX = spriteWidth - tempX - 1;
                             }
+
+                            //Dosent work with spritesheets
 
                             Vector2 rectanglePos = new(tempX, tempY);
 

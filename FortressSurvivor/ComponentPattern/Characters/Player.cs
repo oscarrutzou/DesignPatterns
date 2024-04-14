@@ -11,14 +11,12 @@ namespace FortressSurvivor
     public class Player : Component
     {
         private float speed;
-        Animator animator;
         private GameObject fogOfWarGo, areaWorldColliderGo;
         private Collider collider;
 
         private bool canShoot = true;
         private float lastShot = 0;
         readonly float shootTimer = 1;
-        private Vector2 previousPos;
 
         public Player(GameObject gameObject) : base(gameObject)
         {
@@ -78,7 +76,18 @@ namespace FortressSurvivor
             GameObject.Transform.Translate(newPos);
 
             if (!areaWorldColliderGo.GetComponent<Collider>().CollisionBox.Contains(collider.CollisionBox)){
-                GameObject.Transform.Position = prePos;
+                // Calculate the direction of the collision
+                Vector2 collisionDirection = GameObject.Transform.Position - prePos;
+                collisionDirection.Normalize();
+
+                // Project the newPos vector onto the collision direction
+                float projection = Vector2.Dot(newPos, collisionDirection);
+
+                // Subtract the projection from the newPos vector to get the allowed movement vector
+                Vector2 allowedMovement = newPos - projection * collisionDirection;
+
+                // Apply the allowed movement
+                GameObject.Transform.Position = prePos + allowedMovement;
             }
             else
             {
@@ -99,13 +108,5 @@ namespace FortressSurvivor
             }
         }
 
-
-        public override void OnCollisionEnter(Collider collider)
-        {
-            if (areaWorldColliderGo == collider.GameObject)
-            {
-
-            }
-        }
     }
 }

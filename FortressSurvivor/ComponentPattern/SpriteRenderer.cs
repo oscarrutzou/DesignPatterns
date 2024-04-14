@@ -60,7 +60,7 @@ namespace FortressSurvivor
             drawPos = GameObject.Transform.Position;
             if (animator != null)
             {
-                drawPos += new Vector2(animator.MaxFrames * animator.currentAnimation.FrameDimensions * GameObject.Transform.Scale.X / 2, 0);
+                drawPos += new Vector2(animator.MaxFrames * animator.currentAnimation.FrameDimensions * GameObject.Transform.Scale.X / 2 - (float)(animator.currentAnimation.FrameDimensions * 2), 0);
             }
             //Draws the sprite, and if there is a sourcerectangle set, then it uses that.
             spriteBatch.Draw(Sprite, drawPos, SourceRectangle == Rectangle.Empty ? null : SourceRectangle, Color, GameObject.Transform.Rotation, Origin, GameObject.Transform.Scale, SpriteEffects, LayerDepth);
